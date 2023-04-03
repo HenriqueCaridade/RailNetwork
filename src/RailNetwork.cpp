@@ -60,3 +60,51 @@ std::list<std::string> RailNetwork::topAffectedStations(int k) {
     // TODO: [4.2]
     return std::list<std::string>();
 }
+void RailNetwork::clearVisits() {
+    for(auto& p : nodes)
+        p.second.visited = false;
+}
+void RailNetwork::visit(const std::string& station){
+    nodes[station].visited=true;
+}
+
+list<string> RailNetwork::BFS(const string& src, const string& dest){
+    clearVisits();
+    queue<string> q;
+    q.push(src);
+    list<string> res;
+    visit(src);
+    bool found = false;
+    while(!q.empty() ){ // No more Nodes
+        string curr = q.front();
+        visit(curr);
+        list<string> adjacents = getAdj(curr);
+        q.pop();
+        for(const string& adj:adjacents){
+            Node aux=nodes[adj];
+            if(!aux.visited){
+                aux.prev = curr;
+                q.push(adj);
+            }
+            if(adj == dest){
+                found = true;
+                break;
+            }
+        }
+        if(found) break;
+    }
+    if(found){
+        res.push_front(dest);
+        while(true){
+            if(res.front()!=src){
+                res.push_front(nodes[res.front()].prev);
+            }
+            else break;
+        }
+    }
+    return res;
+}
+
+list<string> RailNetwork::getAdj(const string &station) {
+    return nodes[station].adj;
+}
