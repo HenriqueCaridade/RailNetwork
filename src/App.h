@@ -19,6 +19,8 @@ class App {
     const static char corner = 'o';
     const static char vertical = '|';
     const static char horizontal = '-';
+
+    std::string datasetPath;
     RailManager railMan;
 
 
@@ -88,6 +90,10 @@ class App {
      */
     void mainMenu();
     /**
+     * Data Selection Menu. (Calls runMenu)
+     */
+    void dataSelectionMenu();
+    /**
      * Runs a menu with the given title, image, options and for every valid option calls f(option) to process choice.
      * @tparam Lambda
      * @param const std::string& title
@@ -96,6 +102,8 @@ class App {
      */
     template <typename Lambda>
     void runMenu(const std::string& title, const std::vector<std::pair<char, std::string>>& options, Lambda f);
+
+    void initializeData();
 public:
     /**
      * Default constructor.

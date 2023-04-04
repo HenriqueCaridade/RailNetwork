@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
 
 #include "App.h"
 
@@ -20,6 +21,12 @@ static void clear_screen() {
 }
 
 App::App() = default;
+
+
+void App::initializeData() {
+    railMan = RailManager(datasetPath);
+}
+
 
 string App::getDoubleString(const string& question, const string& invalidMessage, bool (*isValid)(double)) {
     auto isDouble = [](const string& str){
@@ -45,7 +52,7 @@ T App::getInput(const string& question, const string& invalidMessage, const unor
         T aux;
         cin >> aux;
         cout << getBottomLine() << endl;
-        if((validOptions.find(aux) != validOptions.end())) return aux;
+        if(validOptions.empty() || (validOptions.find(aux) != validOptions.end())) return aux;
         cout << vertical << ' ' << invalidMessage << endl;
     }
 }
@@ -55,7 +62,7 @@ string App::getLine(const string& question, const string& invalidMessage, const 
         string aux;
         getline(cin, aux);
         cout << getBottomLine() << endl;
-        if((validOptions.find(aux) != validOptions.end())) return aux;
+        if(validOptions.empty() || (validOptions.find(aux) != validOptions.end())) return aux;
         cout << vertical << ' ' << invalidMessage << endl;
     }
 }
@@ -96,14 +103,15 @@ void App::drawMenu(const string& title, const vector<string>& options){
 template <typename Lambda>
 void App::runMenu(const string &title, const vector<pair<char, string>> &options, Lambda f) {
     clear_screen();
+    cout << datasetPath << endl;
     bool running = true;
+    vector<string> optionsText;
+    unordered_set<char> optionsChar;
+    for(const auto& p : options){
+        optionsChar.insert(p.first);
+        optionsText.push_back(p.first + string(" - ") + p.second);
+    }
     while(running){
-        vector<string> optionsText;
-        unordered_set<char> optionsChar;
-        for(const auto& p : options){
-            optionsChar.insert(p.first);
-            optionsText.push_back(p.first + string(" - ") + p.second);
-        }
         drawMenu(title, optionsText);
         char choice = getInput("Choice:", "Invalid Choice. Try Again.", optionsChar);
         running = f(choice);
@@ -113,6 +121,8 @@ void App::runMenu(const string &title, const vector<pair<char, string>> &options
 
 
 void App::start(){
+    dataSelectionMenu();
+    initializeData();
     mainMenu();
 }
 
@@ -133,5 +143,47 @@ void App::mainMenu() {
         }
         return true;
     });
+}
+
+void App::dataSelectionMenu() {
+    cout << "HERE" << endl;
+    const string title = "Data Selection";
+    clear_screen();
+    bool running = true;
+    while (running) {
+        const string projectPath = filesystem::current_path().parent_path().string() + '\\';
+        string text = string("Current Path: ") + projectPath;
+        cout << "\n" << getTitle(title) << string(spaceBetween, ' ') << '\n'
+             << vertical << ' ' << text << '\n' << getBottomLine() << endl;
+
+        string pathChosen;
+        while (true){
+            pathChosen = "";
+            cout << vertical << " Path:" << flush;
+            cin >> pathChosen;
+            char c = pathChosen[pathChosen.size() - 1];
+            if (c != '/' || c |= '\\') pathChosen += '/';
+            pathChosen = projectPath + pathChosen;
+            cout << getBottomLine() << endl;
+            if (pathChosen == "x") { running = false; break; }
+            if (filesystem::exists(pathChosen)) break;
+            cout << vertical << " Path Doesn't Exist. Try Again. (x to Leave)" << endl;
+        }
+        if (!running) break;
+        bool allGood = true;
+        if (!filesystem::exists(pathChosen + "stations.csv")){
+            allGood = false;
+            cout << vertical << ' ' << pathChosen + "stations.csv not found!" << endl;
+        }
+        if (!filesystem::exists(pathChosen + "network.csv")){
+            allGood = false;
+            cout << vertical << ' ' << pathChosen + "network.csv not found!" << endl;
+        }
+        if (allGood) {
+            datasetPath = pathChosen;
+            running = false;
+        } else cout << vertical << " Path doesn't contain the necessary files." << endl;
+    }
+    clear_screen();
 }
 

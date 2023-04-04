@@ -7,21 +7,17 @@
 
 
 enum SegmentType {
+    INVALID,
     STANDARD,
-    ALFA_PENDULAR,
-    INVALID
+    ALFA_PENDULAR
 };
 
 
 struct Segment {
-    std::string origin;
-    std::string destination;
     unsigned int capacity;
     SegmentType service;
 
-    Segment(std::string origin, std::string destination, unsigned int capacity, SegmentType service) :
-            origin(std::move(origin)),
-            destination(std::move(destination)),
+    Segment(unsigned int capacity, SegmentType service) :
             capacity(capacity),
             service(service) {};
 };

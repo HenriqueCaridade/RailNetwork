@@ -11,14 +11,24 @@
 
 
 class RailManager {
-    const static std::string path;
     std::unordered_map<std::string, Station> stations;
+    std::unordered_map<std::string, std::unordered_map<std::string, Segment>> segments;
     RailNetwork railNet;
 
+    void addSegment(const std::string &stationA, const std::string &stationB, unsigned int capacity, SegmentType service);
+    void addStation(const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line);
+
     void initializeStations(const CSV& stationsCSV);
-    void initializeNetwork(const CSV& networkCSV);
+    void initializeSegments(const CSV& networkCSV);
+    void initializeNetwork();
 public:
     RailManager();
+    explicit RailManager(const std::string& datasetPath);
+
+    const Segment& getSegment(const std::string& origin, const std::string& destination);
+    const Station& getStation(const std::string& station);
+
+
 };
 
 
