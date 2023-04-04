@@ -162,7 +162,7 @@ void App::dataSelectionMenu() {
             cout << vertical << " Path:" << flush;
             cin >> pathChosen;
             char c = pathChosen[pathChosen.size() - 1];
-            if (c != '/' || c |= '\\') pathChosen += '/';
+            if (c != '/' && c != '\\') pathChosen += '/';
             pathChosen = projectPath + pathChosen;
             cout << getBottomLine() << endl;
             if (pathChosen == "x") { running = false; break; }

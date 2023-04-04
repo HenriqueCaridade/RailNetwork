@@ -9,8 +9,13 @@ const RailNetwork::Node& RailNetwork::getNode(const string &station) {
     return nodes.at(station);
 }
 
-void RailNetwork::addNode(const std::string& name, const std::list<std::string>& adj) {
+void RailNetwork::addNode(const std::string& name, const std::list<Segment>& adj) {
     nodes.insert({name, Node(name, "", adj, false)});
+}
+
+
+bool compareSegmentsByCapacity(const Segment& s1, const Segment& s2) {
+    return s1.capacity > s2.capacity;
 }
 
 void RailNetwork::clearVisits() {
@@ -31,15 +36,15 @@ list<string> RailNetwork::BFS(const string& src, const string& dest){
     while(!q.empty() ){ // No more Nodes
         string curr = q.front();
         visit(curr);
-        list<string> adjacents = getAdj(curr);
+        list<Segment> adjacents = getAdj(curr);
         q.pop();
-        for(const string& adj : adjacents){
-            Node aux = nodes.at(adj);
+        for(const Segment& adj : adjacents){
+            Node aux = nodes.at(adj.destination);
             if(!aux.visited){
                 aux.prev = curr;
-                q.push(adj);
+                q.push(adj.destination);
             }
-            if(adj == dest){
+            if(adj.destination == dest){
                 found = true;
                 break;
             }
@@ -58,7 +63,7 @@ list<string> RailNetwork::BFS(const string& src, const string& dest){
     return res;
 }
 
-list<string> RailNetwork::getAdj(const string &station) {
+list<Segment> RailNetwork::getAdj(const string &station) {
     return nodes.at(station).adj;
 }
 
@@ -71,9 +76,19 @@ int RailNetwork::maxFlow(const string &origin, const string &destination) {
     return 0;
 }
 
-std::list<Segment> RailNetwork::importantEdges() {
+list<Segment> RailNetwork::importantEdges() {
     // TODO: [2.2]
-    return std::list<Segment>();
+    list<Segment> segments;
+    for (const auto& [origin, node] : nodes) {
+        for (const auto& seg : node.adj) {
+            int flow = maxFlow(origin, seg.destination);
+            if (flow > 0) {
+                segments.push_back(seg);
+            }
+        }
+    }
+    segments.sort(compareSegmentsByCapacity);
+    return segments;
 }
 
 std::list<std::string> RailNetwork::topMunicipalities(int k) {

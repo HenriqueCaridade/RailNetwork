@@ -16,9 +16,8 @@ RailManager::RailManager(const string& datasetPath) {
 }
 
 void RailManager::addSegment(const string& stationA, const string& stationB, unsigned int capacity, SegmentType service) {
-    Segment s = Segment(capacity, service);
-    segments[stationA].insert({stationB, s});
-    segments[stationB].insert({stationA, s});
+    segments[stationA].insert({stationB, Segment(stationA, stationB, capacity, service)});
+    segments[stationB].insert({stationA, Segment(stationB, stationA, capacity, service)});
 }
 
 void RailManager::addStation(const string& name, const string& district, const string& municipality, const string& township, const string& line){
@@ -54,11 +53,11 @@ void RailManager::initializeSegments(const CSV &networkCSV) {
 }
 
 void RailManager::initializeNetwork() {
-    for (const auto& pair : stations) {
-        list<string> l;
-        for (const auto& p : segments.at(pair.first))
-            l.push_back(p.first);
-        railNet.addNode(pair.first, l);
+    for (const auto& [name, station] : stations) {
+        list<Segment> l;
+        for (const auto& [dest, seg] : segments.at(name))
+            l.push_back(seg);
+        railNet.addNode(name, l);
     }
 }
 

@@ -15,10 +15,10 @@ class RailNetwork { // Directed Graph
     struct Node {
         std::string name;
         std::string prev;
-        std::list<std::string> adj;
+        std::list<Segment> adj;
         bool visited;
 
-        Node(std::string name, std::string prev, std::list<std::string> adj, bool visited) :
+        Node(std::string name, std::string prev, std::list<Segment> adj, bool visited) :
             name(std::move(name)),
             prev(std::move(prev)),
             adj(std::move(adj)),
@@ -30,9 +30,9 @@ class RailNetwork { // Directed Graph
     const Node& getNode(const std::string& station);
     void visit(const std::string& station);
     void clearVisits();
-    std::list<std::string> getAdj(const std::string& station);
+    std::list<Segment> getAdj(const std::string& station);
 public:
-    void addNode(const std::string& name, const std::list<std::string>& adj);
+    void addNode(const std::string& name, const std::list<Segment>& adj);
     std::list<std::string> BFS(const std::string& src, const std::string& dest);
     int maxFlow(const std::string& origin, const std::string& destination);
     std::list<Segment> importantEdges();
