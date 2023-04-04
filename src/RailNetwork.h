@@ -54,8 +54,8 @@ public:
     void addNode(const std::string& name, const std::list<Edge>& adj);
     std::list<std::string> BFS(const std::string& src, const std::string& dest);
     std::list<std::string> BFSFlow(const std::string& src, const std::string& dest);
-    int maxFlow(const std::string& origin, const std::string& destination);
-    std::list<Edge> importantEdges();
+    unsigned maxFlow(const std::string& origin, const std::string& destination);
+    std::list<std::pair<std::string, std::string>> importantStations();
     std::list<std::string> topMunicipalities(int k);
     int maxFlowStation(const std::string& station);
     int maxFlowMinCost(const std::string& origin, const std::string& destination);
