@@ -12,17 +12,34 @@
 
 
 class RailNetwork { // Directed Graph
+    struct Edge {
+        std::string origin;
+        std::string dest;
+        const unsigned capacity;
+        unsigned flow;
+
+        Edge(std::string origin, std::string dest, unsigned capacity) :
+            origin(std::move(origin)),
+            dest(std::move(dest)),
+            capacity(capacity),
+            flow(0) {}
+
+        bool operator<(const Edge& e2) const {
+            return this->capacity < e2.capacity;
+        }
+    };
+
     struct Node {
         std::string name;
         std::string prev;
-        std::list<Segment> adj;
+        std::list<Edge> adj;
         bool visited;
 
-        Node(std::string name, std::string prev, std::list<Segment> adj, bool visited) :
+        Node(std::string name, std::string prev, std::list<Edge> adj, bool visited) :
             name(std::move(name)),
             prev(std::move(prev)),
             adj(std::move(adj)),
-            visited(visited) {};
+            visited(visited) {}
     };
 
     std::unordered_map<std::string, Node> nodes;
@@ -30,18 +47,19 @@ class RailNetwork { // Directed Graph
     const Node& getNode(const std::string& station);
     void visit(const std::string& station);
     void clearVisits();
-    std::list<Segment> getAdj(const std::string& station);
+    std::list<Edge> getAdj(const std::string& station);
 public:
-    void addNode(const std::string& name, const std::list<Segment>& adj);
+    void addNode(const std::string& name, const std::list<Edge>& adj);
     std::list<std::string> BFS(const std::string& src, const std::string& dest);
     int maxFlow(const std::string& origin, const std::string& destination);
-    std::list<Segment> importantEdges();
+    std::list<Edge> importantEdges();
     std::list<std::string> topMunicipalities(int k);
     int maxFlowStation(const std::string& station);
     int maxFlowMinCost(const std::string& origin, const std::string& destination);
     int maxFlowReduced(const std::string& origin, const std::string& destination);
     std::list<std::string> topAffectedStations(int k);
 
+    friend class RailManager;
 };
 
 

@@ -54,9 +54,9 @@ void RailManager::initializeSegments(const CSV &networkCSV) {
 
 void RailManager::initializeNetwork() {
     for (const auto& [name, station] : stations) {
-        list<Segment> l;
+        list<RailNetwork::Edge> l;
         for (const auto& [dest, seg] : segments.at(name))
-            l.push_back(seg);
+            l.emplace_back(name, dest, seg.capacity);
         railNet.addNode(name, l);
     }
 }

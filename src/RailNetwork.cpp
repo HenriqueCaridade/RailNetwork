@@ -9,13 +9,8 @@ const RailNetwork::Node& RailNetwork::getNode(const string &station) {
     return nodes.at(station);
 }
 
-void RailNetwork::addNode(const std::string& name, const std::list<Segment>& adj) {
+void RailNetwork::addNode(const std::string& name, const std::list<Edge>& adj) {
     nodes.insert({name, Node(name, "", adj, false)});
-}
-
-
-bool compareSegmentsByCapacity(const Segment& s1, const Segment& s2) {
-    return s1.capacity > s2.capacity;
 }
 
 void RailNetwork::clearVisits() {
@@ -36,15 +31,15 @@ list<string> RailNetwork::BFS(const string& src, const string& dest){
     while(!q.empty() ){ // No more Nodes
         string curr = q.front();
         visit(curr);
-        list<Segment> adjacents = getAdj(curr);
+        list<Edge> edges = getAdj(curr);
         q.pop();
-        for(const Segment& adj : adjacents){
-            Node aux = nodes.at(adj.destination);
+        for(const Edge& edge : edges) {
+            Node aux = nodes.at(edge.dest);
             if(!aux.visited){
                 aux.prev = curr;
-                q.push(adj.destination);
+                q.push(edge.dest);
             }
-            if(adj.destination == dest){
+            if(edge.dest == dest){
                 found = true;
                 break;
             }
@@ -63,32 +58,32 @@ list<string> RailNetwork::BFS(const string& src, const string& dest){
     return res;
 }
 
-list<Segment> RailNetwork::getAdj(const string &station) {
+list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
     return nodes.at(station).adj;
 }
 
-// =============================================== //
+// []===========================================[] //
 // ||          ALGORITHMIC FUNCTIONS            || //
-// =============================================== //
+// []===========================================[] //
 
 int RailNetwork::maxFlow(const string &origin, const string &destination) {
     // TODO: [2.1]
     return 0;
 }
 
-list<Segment> RailNetwork::importantEdges() {
+list<RailNetwork::Edge> RailNetwork::importantEdges() {
     // TODO: [2.2]
-    list<Segment> segments;
+    list<Edge> edges;
     for (const auto& [origin, node] : nodes) {
-        for (const auto& seg : node.adj) {
-            int flow = maxFlow(origin, seg.destination);
+        for (const auto& edge : node.adj) {
+            int flow = maxFlow(origin, edge.dest);
             if (flow > 0) {
-                segments.push_back(seg);
+                edges.push_back(edge);
             }
         }
     }
-    segments.sort(compareSegmentsByCapacity);
-    return segments;
+    edges.sort();
+    return edges;
 }
 
 std::list<std::string> RailNetwork::topMunicipalities(int k) {
