@@ -31,10 +31,25 @@ int RailNetwork::maxFlow(const string &origin, const string &destination) {
     return 0;
 }
 
+bool compareSegmentsByCapacity(const Segment& s1, const Segment& s2) {
+    return s1.capacity > s2.capacity;
+}
+
 std::list<Segment> RailNetwork::importantEdges() {
     // TODO: [2.2]
-    return std::list<Segment>();
-}
+        std::list<Segment> seg;
+        for (const auto& [origin, destinations] : edges) {
+            for (const auto& [destination, segment] : destinations) {
+                int flow = maxFlow(origin, destination);
+                if (flow > 0) {
+                    seg.push_back(segment);
+                }
+            }
+        }
+        seg.sort(compareSegmentsByCapacity);
+        return seg;
+    }
+
 
 std::list<std::string> RailNetwork::topMunicipalities(int k) {
     // TODO: [2.3]
