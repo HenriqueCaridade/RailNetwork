@@ -45,12 +45,15 @@ class RailNetwork { // Directed Graph
     std::unordered_map<std::string, Node> nodes;
 
     const Node& getNode(const std::string& station);
+    Edge& getEdge(const std::string src, const std::string& dest);
     void visit(const std::string& station);
     void clearVisits();
+    void clearFlow();
     std::list<Edge> getAdj(const std::string& station);
 public:
     void addNode(const std::string& name, const std::list<Edge>& adj);
     std::list<std::string> BFS(const std::string& src, const std::string& dest);
+    std::list<std::string> BFSFlow(const std::string& src, const std::string& dest);
     int maxFlow(const std::string& origin, const std::string& destination);
     std::list<Edge> importantEdges();
     std::list<std::string> topMunicipalities(int k);

@@ -57,7 +57,44 @@ list<string> RailNetwork::BFS(const string& src, const string& dest){
     }
     return res;
 }
-
+list<std::string> RailNetwork::BFSFlow(const string &src, const string &dest) {
+    clearFlow();
+    clearVisits();
+    queue<string> q;
+    q.push(src);
+    list<string> res;
+    visit(src);
+    bool found = false;
+    while(!q.empty() ){ // No more Nodes
+        string curr = q.front();
+        visit(curr);
+        list<Edge> edges = getAdj(curr);
+        q.pop();
+        for(const Edge& edge : edges) {
+            if(edge.flow == edge.capacity) continue; // if segment flow is full dont add node to queue
+            Node aux = nodes.at(edge.dest);
+            if(!aux.visited){
+                aux.prev = curr;
+                q.push(edge.dest);
+            }
+            if(edge.dest == dest){
+                found = true;
+                break;
+            }
+        }
+        if(found) break;
+    }
+    if(found){
+        res.push_front(dest);
+        while(true) {
+            if (res.front() != src) {
+                res.push_front(nodes.at(res.front()).prev);
+            }
+            else break;
+        }
+    }
+    return res;
+}
 list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
     return nodes.at(station).adj;
 }
@@ -67,8 +104,34 @@ list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
 // []===========================================[] //
 
 int RailNetwork::maxFlow(const string &origin, const string &destination) {
-    // TODO: [2.1]
-    return 0;
+    int maxFlow=0;
+    while(true){
+        list<string> res = BFSFlow(origin,destination);
+        if(res.empty()) break;
+        int bottleneck = INT_MAX;
+        auto stop = res.end();
+        stop--;
+        for(auto it= res.begin(); it != stop; it++){ // find bottleneck in the shortest path
+            Node ver=nodes.at(*it);
+            auto iter2 = it;
+            iter2++;
+            string next = *iter2;
+            Edge edge = getEdge(*it,next);
+            unsigned remaining = edge.capacity - edge.flow;
+            if(remaining < bottleneck)
+                bottleneck = remaining;
+        }
+        maxFlow+=bottleneck;
+        for(auto it=res.begin();it!=stop;it++){ // find bottleneck in the shortest path
+            Node ver=nodes.at(*it);
+            auto iter2 = it;
+            iter2++;
+            string next = *iter2;
+            Edge edge = getEdge(*it,next);
+            edge.flow += bottleneck;
+        }
+    }
+    return maxFlow;
 }
 
 list<RailNetwork::Edge> RailNetwork::importantEdges() {
@@ -110,3 +173,19 @@ std::list<std::string> RailNetwork::topAffectedStations(int k) {
     // TODO: [4.2]
     return std::list<std::string>();
 }
+
+RailNetwork::Edge &RailNetwork::getEdge(const std::string src, const string &dest) {
+    for(Edge& edge:nodes.at(src).adj){
+        if(edge.dest==dest)
+            return edge;
+    }
+}
+
+void RailNetwork::clearFlow() {
+    for(auto& [name,node]:nodes){
+        for(Edge& e:node.adj)
+            e.flow=0;
+    }
+}
+
+
