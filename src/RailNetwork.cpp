@@ -178,7 +178,41 @@ list<string> RailNetwork::topMunicipalities(int k, const unordered_map<string, S
     }
     return res;
 }
-
+list<string> RailNetwork::topDistricts(int k, const unordered_map<string, Station>& stations) {
+    // Exercise [2.3]
+    // Where should management assign larger budgets?
+    // Ans: To districts where there are more trains (Max Flow).
+    unordered_map<string, RailNetwork> districts;
+    for (auto& [name, node] : nodes) {
+        const string& district = stations.at(name).district;
+        districts[district].addNode(name, {});
+        for (const auto& edge : node.adj)
+            if (stations.at(edge.dest).district == district)
+                addEdge(name, edge);
+    }
+    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> disMaxFlows;
+    for (auto& [district, graph] : districts) {
+        priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> nodeDegrees;
+        for (auto& [name, node] : graph.nodes) {
+            unsigned degree = 0;
+            for (auto& edge : node.adj)
+                degree += edge.capacity;
+            nodeDegrees.push({name, degree});
+        }
+        string origin = nodeDegrees.top().first;
+        nodeDegrees.pop();
+        string dest = nodeDegrees.top().first;
+        unsigned maxFlow = graph.maxFlow(origin, dest);
+        disMaxFlows.push({district, maxFlow});
+    }
+    list<string> res;
+    for (int i = 0; i < k; i++) {
+        if (disMaxFlows.empty()) break;
+        res.push_back(disMaxFlows.top().first);
+        disMaxFlows.pop();
+    }
+    return res;
+}
 int RailNetwork::maxFlowStation(const string &station) {
     // TODO: [2.4]
     return 0;

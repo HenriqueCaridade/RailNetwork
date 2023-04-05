@@ -56,6 +56,7 @@ public:
     unsigned maxFlow(const std::string& origin, const std::string& destination);
     std::list<std::pair<std::string, std::string>> importantStations();
     std::list<std::string> topMunicipalities(int k, const std::unordered_map<std::string, Station>& stations);
+    std::list<std::string> topDistricts(int k, const std::unordered_map<std::string, Station>& stations);
     int maxFlowStation(const std::string& station);
     int maxFlowMinCost(const std::string& origin, const std::string& destination);
     int maxFlowReduced(const std::string& origin, const std::string& destination);
