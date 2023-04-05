@@ -1,4 +1,5 @@
 
+#include <stdexcept>
 #include <unordered_set>
 #include <queue>
 #include <algorithm>
@@ -9,35 +10,74 @@
 using namespace std;
 
 
+// Compare Classes for Priority Queues //
+template<class T>
+class MaxHeapCompare {
+public:
+    bool operator() (const pair<T,unsigned>& p1, const pair<T, unsigned>& p2) {
+        return p1.second > p2.second;
+    }
+};
+
+template<class T>
+class MinHeapCompare {
+public:
+    bool operator() (const pair<T,unsigned>& p1, const pair<T, unsigned>& p2) {
+        return p1.second < p2.second;
+    }
+};
+
+
+const std::string RailNetwork::sourceNodeName = "__SOURCE_NODE_NAME__";
+
 const RailNetwork::Node& RailNetwork::getNode(const string &station) {
     return nodes.at(station);
 }
 
 void RailNetwork::addNode(const std::string& name, const std::list<Edge>& adj) {
-    nodes.insert({name, Node(name, "", adj, false)});
+    nodes.insert({name, Node(name, adj)});
 }
 
 RailNetwork::Edge &RailNetwork::getEdge(const std::string& src, const string &dest) {
     for(Edge& edge:nodes.at(src).adj)
         if(edge.dest == dest)
             return edge;
+    throw std::out_of_range("Didn't Find the Edge.");
 }
 
-void RailNetwork::clearFlow() {
-    for(auto& [name,node] : nodes)
-        for(Edge& e : node.adj)
-            e.flow = 0;
+void RailNetwork::visit(const std::string& station){
+    nodes.at(station).visited = true;
 }
 
 void RailNetwork::clearVisits() {
     for(auto& p : nodes)
         p.second.visited = false;
 }
-void RailNetwork::visit(const std::string& station){
-    nodes.at(station).visited = true;
+
+void RailNetwork::clearFlow() {
+    for(auto& [_,node] : nodes)
+        for(Edge& e : node.adj)
+            e.flow = 0;
 }
 
-list<std::string> RailNetwork::BFSFlow(const string &src, const string &dest) {
+void RailNetwork::clearCost() {
+    for(auto& [_,node] : nodes)
+        node.cost = UINT_MAX;
+}
+
+void RailNetwork::setCost(const string& node, unsigned cost) {
+    nodes.at(node).cost = cost;
+}
+
+unsigned RailNetwork::getCost(const string& node) {
+    return nodes.at(node).cost;
+}
+
+void RailNetwork::setPrev(const string &node, const string &prev) {
+    nodes.at(node).prev = prev;
+}
+
+list<string> RailNetwork::BFSFlow(const string &src, const string &dest) {
     clearVisits();
     queue<pair<string, SegmentType>> q;
     q.push({src, INVALID});
@@ -52,9 +92,8 @@ list<std::string> RailNetwork::BFSFlow(const string &src, const string &dest) {
         for(const Edge& edge : edges) {
             if (!type && (type != edge.type)) continue; // Different Train
             if (edge.flow == edge.capacity) continue; // if segment flow is full dont add node to queue
-            Node& aux = nodes.at(edge.dest);
-            if(!aux.visited){
-                aux.prev = curr;
+            if(!getNode(edge.dest).visited){
+                setPrev(edge.dest, curr);
                 q.push({edge.dest, type});
             }
             if(edge.dest == dest){
@@ -75,6 +114,70 @@ list<std::string> RailNetwork::BFSFlow(const string &src, const string &dest) {
     }
     return res;
 }
+
+static unsigned getCostByType(SegmentType type){
+    switch(type){
+        case INVALID:
+            return 0;
+        case STANDARD:
+            return 2;
+        case ALFA_PENDULAR:
+            return 4;
+    }
+}
+
+list<list<string>> RailNetwork::BFSCost(const string &src, const string &dest) {
+    clearCost();
+    priority_queue<pair<pair<list<string>, SegmentType>, unsigned>, vector<pair<pair<list<string>, SegmentType>, unsigned>>, MinHeapCompare<pair<list<string>, SegmentType>>> q;
+    q.push({{{src}, INVALID}, 0});
+    setCost(src, 0);
+    list<list<string>> res;
+    bool found = false;
+    unsigned minCost = UINT_MAX;
+    while(!q.empty() ){ // No more Nodes
+        const auto& [p, cost] = q.top();
+        auto [curr, type] = p;
+        q.pop();
+        if (cost > minCost) break;
+        if (curr.back() == dest) {
+            res.push_back(curr);
+            minCost = cost;
+            continue;
+        }
+        list<Edge> edges = getAdj(curr.back());
+        unsigned newCost = cost + getCostByType(type);
+        for(const Edge& edge : edges) {
+            if (!type && (type != edge.type)) continue; // Different Train
+            if (newCost <= getCost(edge.dest)) { // Better Path
+                setCost(edge.dest, newCost);
+                curr.push_back(edge.dest);
+                q.push({{curr, type}, newCost});
+                curr.pop_back();
+            }
+        }
+    }
+    return res;
+}
+
+list<string> RailNetwork::distancedNodes(const string& src, unsigned distance) {
+    clearVisits();
+    queue<pair<string, unsigned>> q;
+    q.push({src, 0});
+    visit(src);
+    list<string> res;
+    while(!q.empty() ){ // No more Nodes
+        const auto& [curr, dist] = q.front();
+        q.pop();
+        if (dist > distance) break; // No more distant nodes
+        if (dist == distance) res.push_back(curr);
+        visit(curr);
+        for(const Edge& edge : getAdj(curr))
+            if(!getNode(edge.dest).visited)
+                q.push({edge.dest, dist + 1});
+    }
+    return res;
+}
+
 list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
     return nodes.at(station).adj;
 }
@@ -82,13 +185,6 @@ list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
 void RailNetwork::addEdge(const string &node, const Edge &edge) {
     nodes.at(node).adj.push_back(edge);
 }
-
-class ComparePairs {
-public:
-    bool operator() (const pair<string,unsigned>& p1, const pair<string, unsigned>& p2){
-        return p1.second > p2.second;
-    }
-};
 
 // []===========================================[] //
 // ||          ALGORITHMIC FUNCTIONS            || //
@@ -155,9 +251,9 @@ list<string> RailNetwork::topMunicipalities(int k, const unordered_map<string, S
             if (stations.at(edge.dest).municipality == municipality)
                 addEdge(name, edge);
     }
-    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> munMaxFlows;
+    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, MaxHeapCompare<string>> munMaxFlows;
     for (auto& [municipality, graph] : municipalities) {
-        priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> nodeDegrees;
+        priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, MaxHeapCompare<string>> nodeDegrees;
         for (auto& [name, node] : graph.nodes) {
             unsigned degree = 0;
             for (auto& edge : node.adj)
@@ -190,9 +286,9 @@ list<string> RailNetwork::topDistricts(int k, const unordered_map<string, Statio
             if (stations.at(edge.dest).district == district)
                 addEdge(name, edge);
     }
-    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> disMaxFlows;
+    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, MaxHeapCompare<string>> disMaxFlows;
     for (auto& [district, graph] : districts) {
-        priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, ComparePairs> nodeDegrees;
+        priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, MaxHeapCompare<string>> nodeDegrees;
         for (auto& [name, node] : graph.nodes) {
             unsigned degree = 0;
             for (auto& edge : node.adj)
@@ -213,17 +309,59 @@ list<string> RailNetwork::topDistricts(int k, const unordered_map<string, Statio
     }
     return res;
 }
-int RailNetwork::maxFlowStation(const string &station) {
-    // TODO: [2.4]
-    return 0;
+unsigned RailNetwork::maxFlowStation(const string &station) {
+    // Exercise [2.4]
+    list<string> nodesAtDistanceTwo = distancedNodes(station, 2);
+    if (nodesAtDistanceTwo.empty()) {
+        unsigned sum = 0;
+        for (const Edge& edge : getAdj(station))
+            sum += edge.capacity;
+        return sum;
+    }
+    Node sourceNode = Node(sourceNodeName, {});
+    nodes.insert({sourceNodeName, sourceNode});
+    for (const string& node : nodesAtDistanceTwo) {
+        addEdge(sourceNodeName, Edge(sourceNodeName, node, INVALID, UINT_MAX));
+    }
+    unsigned res = maxFlow(sourceNodeName, station);
+    nodes.erase(sourceNodeName);
+    return res;
 }
 
-int RailNetwork::maxFlowMinCost(const string &origin, const string &destination) {
-    // TODO: [3.1]
-    return 0;
+unsigned RailNetwork::maxFlowMinCost(const string &origin, const string &destination) {
+    // Exercise [3.1]
+    // 1 - Get all paths with the minimum cost.
+    // 2 - Build a sub-graph with only the nodes and edges that belong to any minCost path.
+    // 3 - Calculate max flow of the sub-graph.
+    // Step 1:
+    list<list<string>> allPathsMinCost = BFSCost(origin, destination);
+    // Step 2:
+    RailNetwork subGraph;
+    for (const list<string>& path : allPathsMinCost){
+        string prev;
+        for (const string& node : path) {
+            if (!prev.empty()) {
+                try {
+                    subGraph.getEdge(prev, node);
+                } catch (std::out_of_range& e) {
+                    // If Edge not in subGraph add it.
+                    subGraph.addEdge(prev, getEdge(prev, node));
+                }
+            }
+            try {
+                subGraph.getNode(node);
+            } catch (std::exception& e) {
+                // If Node not in subGraph add it.
+                subGraph.addNode(node, {});
+            }
+            prev = node;
+        }
+    }
+    // Step 3:
+    return subGraph.maxFlow(origin, destination);
 }
 
-int RailNetwork::maxFlowReduced(const string &origin, const string &destination) {
+unsigned RailNetwork::maxFlowReduced(const string &origin, const string &destination) {
     // TODO: [4.1]
     return 0;
 }
@@ -232,8 +370,3 @@ std::list<std::string> RailNetwork::topAffectedStations(int k) {
     // TODO: [4.2]
     return std::list<std::string>();
 }
-
-
-
-
-
