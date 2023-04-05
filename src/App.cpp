@@ -101,9 +101,8 @@ void App::drawMenu(const string& title, const vector<string>& options){
 }
 
 template <typename Lambda>
-void App::runMenu(const string &title, const vector<pair<char, string>> &options, Lambda f) {
-    clear_screen();
-    cout << datasetPath << endl;
+void App::runMenu(const string &title, const vector<pair<char, string>> &options, Lambda f, bool clearFirst, bool clearLast) {
+    if (clearFirst) clear_screen();
     bool running = true;
     vector<string> optionsText;
     unordered_set<char> optionsChar;
@@ -116,7 +115,7 @@ void App::runMenu(const string &title, const vector<pair<char, string>> &options
         char choice = getInput("Choice:", "Invalid Choice. Try Again.", optionsChar);
         running = f(choice);
     }
-    clear_screen();
+    if (clearLast) clear_screen();
 }
 
 
@@ -141,12 +140,12 @@ void App::mainMenu() {
             case '4': break;
             case 'x': return false;
         }
+        clear_screen();
         return true;
-    });
+    }, false);
 }
 
 void App::dataSelectionMenu() {
-    cout << "HERE" << endl;
     const string title = "Data Selection";
     clear_screen();
     bool running = true;

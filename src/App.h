@@ -101,7 +101,7 @@ class App {
      * @param Lambda f
      */
     template <typename Lambda>
-    void runMenu(const std::string& title, const std::vector<std::pair<char, std::string>>& options, Lambda f);
+    void runMenu(const std::string& title, const std::vector<std::pair<char, std::string>>& options, Lambda f, bool clearFirst = true, bool clearLast = true);
 
     void initializeData();
 public:
