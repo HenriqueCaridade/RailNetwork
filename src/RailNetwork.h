@@ -73,8 +73,7 @@ public:
     unsigned maxFlowStation(const std::string& station);
     unsigned maxFlowMinCost(const std::string& origin, const std::string& destination);
     unsigned maxFlowReduced(const std::string& origin, const std::string& destination);
-    std::list<std::string> topAffectedStations(int k);
-
+    std::list<std::string> topAffectedStations(int k,  const std::unordered_map<std::string, Station>& stations );
     friend class RailManager;
     friend class App;
 };

@@ -420,7 +420,30 @@ unsigned RailNetwork::maxFlowReduced(const string &origin, const string &destina
     return maxFlow;
 }
 
-std::list<std::string> RailNetwork::topAffectedStations(int k) {
-    // TODO: [4.2]
-    return std::list<std::string>();
+list<string> RailNetwork::topAffectedStations(int k, const unordered_map<string,Station>& stations) {
+    priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, MaxHeapCompare<string>> flowVariance;
+    for(auto [name,station]:stations){
+        list<string> nodesAtDistanceTwo = distancedNodes(name,2);
+        if (nodesAtDistanceTwo.empty()) {
+            unsigned sum = 0;
+            for (const Edge& edge : getAdj(name))
+                sum += edge.capacity;
+        }
+        Node sourceNode = Node(sourceNodeName, {});
+        nodes.insert({sourceNodeName, sourceNode});
+        for (const string& node : nodesAtDistanceTwo) {
+            addEdge(sourceNodeName, Edge(sourceNodeName, node, INVALID, UINT_MAX));
+        }
+        unsigned normalFlow = maxFlow(sourceNodeName, name);
+        unsigned reducedFlow = maxFlowReduced(sourceNodeName, name);
+        flowVariance.emplace(name,normalFlow-reducedFlow);
+        nodes.erase(sourceNodeName);
+    }
+    list<string> res;
+    for (int i = 0; i < k; i++) {
+        if (flowVariance.empty()) break;
+        res.push_back(flowVariance.top().first);
+        flowVariance.pop();
+    }
+    return res;
 }

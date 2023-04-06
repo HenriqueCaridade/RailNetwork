@@ -294,7 +294,7 @@ void App::mostSensitiveStationsOption() {
     if (input == "x") return;
     int k = ceil(stod(input));
     cout << " - Top " << k << " Most Sensitive Stations -" << endl;
-    for (const auto& station : railMan.topAffectedStations(k))
+    for (const auto& station : railMan.topAffectedStations(k,segmentsToDeactivate,stationsToDeactivate))
         cout << station << '\n';
     cout << flush;
 }

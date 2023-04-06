@@ -169,7 +169,13 @@ unsigned RailManager::maxFlowReduced(const string &origin, const string &destina
     return railNet.maxFlowReduced(origin, destination);
 }
 
-list<string> RailManager::topAffectedStations(int k) {
-    return railNet.topAffectedStations(k);
+std::list<std::string> RailManager::topAffectedStations(int k, const list<std::pair<std::string, std::string>> &segmentsToDeactivate,const list<std::string> &stationsToDeactivate) {
+    reactivateAllStations();
+    reactivateAllSegments();
+    deactivateSegments(segmentsToDeactivate);
+    deactivateStations(stationsToDeactivate);
+    return railNet.topAffectedStations(k,stations);
 }
+
+
 
