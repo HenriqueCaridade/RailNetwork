@@ -14,7 +14,7 @@ using namespace std;
 
 static void clear_screen() {
 #ifdef _WIN32
-    std::system("cls");
+    // std::system("cls");
 #else
     std::system("clear");
 #endif
@@ -143,6 +143,7 @@ void App::mainMenu() {
         return true;
     }, false);
 }
+
 
 // ================== //
 // BASIC SERVICE MENU //

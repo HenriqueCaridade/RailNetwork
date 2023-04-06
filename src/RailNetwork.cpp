@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <queue>
 #include <algorithm>
+#include <iostream>
 
 #include "RailNetwork.h"
 #include "Segment.h"
@@ -83,35 +84,29 @@ list<string> RailNetwork::BFSFlow(const string &src, const string &dest) {
     q.push({src, INVALID});
     list<string> res;
     visit(src);
-    bool found = false;
-    while(!q.empty() ){ // No more Nodes
-        const auto& [curr, type] = q.front();
+    while (!q.empty()) { // No more Nodes
+        auto [curr, type] = q.front();
         visit(curr);
         list<Edge> edges = getAdj(curr);
         q.pop();
         for(const Edge& edge : edges) {
-            if (type!=INVALID && (type != edge.type)) continue; // Different Train
+            if (type != INVALID && (type != edge.type)) continue; // Different Train
             if (edge.flow == edge.capacity) continue; // if segment flow is full dont add node to queue
-            if(!getNode(edge.dest).visited){
+            if (!getNode(edge.dest).visited) {
                 setPrev(edge.dest, curr);
                 q.push({edge.dest, edge.type});
             }
-            if(edge.dest == dest){
-                found = true;
-                break;
-            }
-        }
-        if(found) break;
-    }
-    if(found){
-        res.push_front(dest);
-        while(true) {
-            if (res.front() != src) {
-                res.push_front(nodes.at(res.front()).prev);
-            }
-            else break;
+            if (edge.dest == dest) goto found_destination;
         }
     }
+    goto skip_found_destination;
+    found_destination:
+    res.push_front(dest);
+    while (true) {
+        if (res.front() == src) break;
+        res.push_front(getNode(res.front()).prev);
+    }
+    skip_found_destination:
     return res;
 }
 
@@ -135,7 +130,7 @@ list<list<string>> RailNetwork::BFSCost(const string &src, const string &dest) {
     bool found = false;
     unsigned minCost = UINT_MAX;
     while(!q.empty() ){ // No more Nodes
-        const auto& [p, cost] = q.top();
+        auto [p, cost] = q.top();
         auto [curr, type] = p;
         q.pop();
         if (cost > minCost) break;
@@ -165,9 +160,8 @@ list<string> RailNetwork::BFSActive(const string &src, const string &dest) {
     q.push({src, INVALID});
     list<string> res;
     visit(src);
-    bool found = false;
     while(!q.empty() ){ // No more Nodes
-        const auto& [curr, type] = q.front();
+        auto [curr, type] = q.front();
         visit(curr);
         list<Edge> edges = getAdj(curr);
         q.pop();
@@ -180,22 +174,17 @@ list<string> RailNetwork::BFSActive(const string &src, const string &dest) {
                 setPrev(edge.dest, curr);
                 q.push({edge.dest, type});
             }
-            if(edge.dest == dest){
-                found = true;
-                break;
-            }
-        }
-        if(found) break;
-    }
-    if(found){
-        res.push_front(dest);
-        while(true) {
-            if (res.front() != src) {
-                res.push_front(nodes.at(res.front()).prev);
-            }
-            else break;
+            if(edge.dest == dest) goto found_destination;
         }
     }
+    goto skip_found_destination;
+    found_destination:
+    res.push_front(dest);
+    while (true) {
+        if (res.front() == src) break;
+        res.push_front(getNode(res.front()).prev);
+    }
+    skip_found_destination:
     return res;
 }
 
@@ -206,7 +195,7 @@ list<string> RailNetwork::distancedNodes(const string& src, unsigned distance) {
     visit(src);
     list<string> res;
     while(!q.empty() ){ // No more Nodes
-        const auto& [curr, dist] = q.front();
+        auto [curr, dist] = q.front();
         q.pop();
         if (dist > distance) break; // No more distant nodes
         if (dist == distance) res.push_back(curr);
@@ -219,11 +208,11 @@ list<string> RailNetwork::distancedNodes(const string& src, unsigned distance) {
 }
 
 list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
-    return nodes.at(station).adj;
+    return getNode(station).adj;
 }
 
 void RailNetwork::addEdge(const string &node, const Edge &edge) {
-    nodes.at(node).adj.push_back(edge);
+    getNode(node).adj.push_back(edge);
 }
 
 // []===========================================[] //
@@ -242,9 +231,7 @@ unsigned RailNetwork::maxFlow(const string &origin, const string &destination) {
         auto itNext = res.begin();
         itNext++;
         while(itNext != res.end()){ // find bottleneck in the shortest path
-            Node vert = nodes.at(*it);
-            string next = *itNext;
-            Edge edge = getEdge(*it,next);
+            const Edge& edge = getEdge(*it, *itNext);
             unsigned remaining = edge.capacity - edge.flow;
             if(remaining < bottleneck) bottleneck = remaining;
             it++; itNext++;
@@ -253,10 +240,8 @@ unsigned RailNetwork::maxFlow(const string &origin, const string &destination) {
         itNext = res.begin();
         itNext++;
         maxFlow += bottleneck;
-        while(it != res.end()){ // find bottleneck in the shortest path
-            Node vert = nodes.at(*it);
-            string next = *itNext;
-            Edge edge = getEdge(*it,next);
+        while(itNext != res.end()){ // find bottleneck in the shortest path
+            Edge& edge = getEdge(*it, *itNext);
             edge.flow += bottleneck;
             it++; itNext++;
         }
