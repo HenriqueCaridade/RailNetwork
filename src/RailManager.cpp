@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "RailManager.h"
-
 using namespace std;
 
 
@@ -12,6 +11,9 @@ RailManager::RailManager(const string& datasetPath) {
     initializeStations(CSVReader::read(datasetPath + "stations.csv"));
     initializeSegments(CSVReader::read(datasetPath + "network.csv"));
     initializeNetwork();
+    string a ="Casa Branca";
+    string b = "Portalegre";
+    cout<<railNet.maxFlow(a,b)<<endl;
 }
 
 void RailManager::addSegment(const string& stationA, const string& stationB, unsigned int capacity, SegmentType service) {
@@ -61,7 +63,7 @@ void RailManager::initializeSegments(const CSV &networkCSV) {
     unsigned emptyCount = 0, repeatedCount = 0;
     for(int i = 1; i < networkCSV.size(); i++){ // Skip first line
         CSVLine line = networkCSV[i];
-        if (line.size() != 5) continue;
+        if (line.size() != 4) continue;
         // Check If Is Empty Entry
         bool emptyEntry = false;
         for (const string& str : line)
