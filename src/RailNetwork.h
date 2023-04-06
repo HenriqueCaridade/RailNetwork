@@ -49,7 +49,7 @@ class RailNetwork { // Directed Graph
 
     std::unordered_map<std::string, Node> nodes;
 
-    const Node& getNode(const std::string& station);
+    Node& getNode(const std::string& station);
     Edge& getEdge(const std::string& src, const std::string& dest);
     void visit(const std::string& station);
     void clearVisits();
@@ -76,8 +76,7 @@ public:
     std::list<std::string> topAffectedStations(int k);
 
     friend class RailManager;
-
-
+    friend class App;
 };
 
 

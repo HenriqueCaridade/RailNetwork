@@ -22,6 +22,7 @@ class RailManager {
     void initializeSegments(const CSV& networkCSV);
     void initializeNetwork();
     void clearData();
+
 public:
     RailManager();
     explicit RailManager(const std::string& datasetPath);
@@ -30,6 +31,25 @@ public:
     const Segment& getSegment(const std::string& origin, const std::string& destination);
     const Station& getStation(const std::string& station);
 
+    unsigned maxFlow(const std::string& origin, const std::string& destination);
+    std::list<std::pair<std::string, std::string>> importantStations();
+    std::list<std::string> topMunicipalities(int k);
+    std::list<std::string> topDistricts(int k);
+    unsigned maxFlowStation(const std::string& station);
+    unsigned maxFlowMinCost(const std::string& origin, const std::string& destination);
+    unsigned maxFlowReduced(const std::string& origin, const std::string& destination, const std::list<std::pair<std::string, std::string>>& segmentsToDeactivate, const std::list<std::string>& stationsToDeactivate);
+    std::list<std::string> topAffectedStations(int k);
+
+
+    bool segmentExists(const std::string& origin, const std::string& destination);
+    bool stationExists(const std::string& station);
+
+    void reactivateAllStations();
+    void reactivateAllSegments();
+    void deactivateStations(const std::list<std::string>& stations);
+    void deactivateSegments(const std::list<std::pair<std::string, std::string>>& segments);
+
+    friend class App;
 
 };
 

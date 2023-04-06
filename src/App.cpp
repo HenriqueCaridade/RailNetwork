@@ -126,17 +126,17 @@ void App::start(){
 
 void App::mainMenu() {
     runMenu("Rail Manager", {
-            {'d', "Data Selection"},
             {'1', "Basic Service Metrics"},
             {'2', "Operation Cost Optimization"},
             {'3', "Reliability and Sensitivity to Line Failures"},
+            {'d', "Data Selection"},
             {'x', "Exit App"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case 'd': dataSelectionMenu(); return true;
             case '1': basicServiceMenu(); break;
             case '2': costMenu(); break;
             case '3': reliabilityMenu(); break;
+            case 'd': dataSelectionMenu(); return true;
             case 'x': return false;
         }
         clear_screen();
@@ -144,57 +144,249 @@ void App::mainMenu() {
     }, false);
 }
 
+// ================== //
+// BASIC SERVICE MENU //
+// ================== //
+
 void App::basicServiceMenu() {
-    runMenu("Rail Manager", {
+    runMenu("Basic Service Metrics", {
             {'1', "Max Number of Trains from A to B."},
-            {'2', "Important Stations"},
+            {'2', "Important Stations Pairs"},
             {'3', "Larger Budget Demanding Places"},
             {'4', "Max Number of Trains that Arrive at a Station"},
-            {'x', "Exit App"}
+            {'x', "Back"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case '1': /* TODO */ break;
-            case '2': /* TODO */ break;
-            case '3': /* TODO */ break;
-            case '4': /* TODO */ break;
+            case '1': maxFlowOption(); break;
+            case '2': importantStationsOption(); break;
+            case '3': largerBudgetPlacesOption(); break;
+            case '4': maxFlowStationOption(); break;
             case 'x': return false;
         }
-        clear_screen();
         return true;
     });
 }
+
+void App::maxFlowOption() {
+    string origin, destination;
+    unordered_set<string> stationNames;
+    for (const auto& [name, _] : railMan.stations)
+        stationNames.insert(name);
+    stationNames.insert("x"); // Cancel Option
+    cin.ignore(); // Ignore \n char from previous choice.
+    origin = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (origin == "x") return;
+    destination = getLine("Destination Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (destination == "x") return;
+    cout << " - Max Flow between " << origin << " and " << destination << " -" << endl;
+    cout << "Max Flow: " << railMan.maxFlow(origin, destination) << endl;
+}
+
+void App::importantStationsOption() {
+    cout << " - Important Stations Pairs -" << endl;
+    for (const auto& [stationA, stationB] : railMan.importantStations())
+        cout << stationA << " - " << stationB << '\n';
+    cout << flush;
+}
+
+void App::largerBudgetPlacesOption() {
+    string input = getDoubleString("Top k Municipalities (> 0) (x to Cancel):", "Invalid Number. Try Again.", [](double x) -> bool { return x > 0; });
+    if (input == "x") return;
+    int munK = ceil(stod(input));
+    input = getDoubleString("Top k Districts (> 0) (x to Cancel):", "Invalid Number. Try Again.", [](double x) -> bool { return x > 0; });
+    if (input == "x") return;
+    int disK = ceil(stod(input));
+    cout << " - Top " << munK << " Municipalities -" << endl;
+    for (const auto& municipality : railMan.topMunicipalities(munK))
+        cout << municipality << '\n';
+    cout << "\n - Top " << disK << " Districts -" << endl;
+    for (const auto& district : railMan.topDistricts(munK))
+        cout << district << '\n';
+    cout << flush;
+}
+
+void App::maxFlowStationOption() {
+    string station;
+    unordered_set<string> stationNames;
+    for (const auto& [name, _] : railMan.stations)
+        stationNames.insert(name);
+    stationNames.insert("x"); // Cancel Option
+    cin.ignore(); // Ignore \n char from previous choice.
+    station = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (station == "x") return;
+    cout << " - Max Flow of " << station << " -" << endl;
+    cout << "Max Flow: " << railMan.maxFlowStation(station) << endl;
+}
+
+
+// ========= //
+// COST MENU //
+// ========= //
 
 void App::costMenu() {
-    runMenu("Rail Manager", {
+    runMenu("Operation Cost Optimization", {
             {'1', "Max Amount of Trains that Can Travel with Minimum Cost"},
-            {'x', "Exit App"}
+            {'x', "Back"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case '1': /* TODO */ break;
+            case '1': maxFlowMinCostOption(); break;
             case 'x': return false;
         }
-        clear_screen();
         return true;
     });
 }
 
+void App::maxFlowMinCostOption() {
+    string origin, destination;
+    unordered_set<string> stationNames;
+    for (const auto& [name, _] : railMan.stations)
+        stationNames.insert(name);
+    stationNames.insert("x"); // Cancel Option
+    cin.ignore(); // Ignore \n char from previous choice.
+    origin = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (origin == "x") return;
+    destination = getLine("Destination Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (destination == "x") return;
+    cout << " - Max Flow with the Minimum Cost between " << origin << " and " << destination << " -" << endl;
+    cout << "Max Flow: " << railMan.maxFlowMinCost(origin, destination) << endl;
+}
+
+
+// ================ //
+// RELIABILITY MENU //
+// ================ //
+
 void App::reliabilityMenu() {
-    runMenu("Rail Manager", {
+    runMenu("Reliability and Sensitivity to Line Failures", {
             {'1', "Max Flow for Reduced Connectivity"},
             {'2', "Most Sensitive Stations"},
             {'3', "Set Line and Station Failures"},
-            {'x', "Exit App"}
+            {'x', "Back"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case '1': /* TODO */ break;
-            case '2': /* TODO */ break;
-            case '3': /* TODO: Another Menu*/ break;
+            case '1': maxFlowReducedOption(); break;
+            case '2': mostSensitiveStationsOption(); break;
+            case '3': reducedSettingsMenu(); break;
             case 'x': return false;
         }
-        clear_screen();
         return true;
     });
 }
+
+void App::maxFlowReducedOption() {
+    string origin, destination;
+    unordered_set<string> stationNames;
+    for (const auto& [name, _] : railMan.stations)
+        stationNames.insert(name);
+    stationNames.insert("x"); // Cancel Option
+    cin.ignore(); // Ignore \n char from previous choice.
+    origin = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (origin == "x") return;
+    destination = getLine("Destination Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    if (destination == "x") return;
+    cout << " - Max Flow of the Reduced Network between " << origin << " and " << destination << " -" << endl;
+    cout << "Max Flow: " << railMan.maxFlowReduced(origin, destination, segmentsToDeactivate, stationsToDeactivate) << endl;
+}
+
+void App::mostSensitiveStationsOption() {
+    string input = getDoubleString("Top k (> 0) (x to Cancel):", "Invalid Number. Try Again.", [](double x) -> bool { return x > 0; });
+    if (input == "x") return;
+    int k = ceil(stod(input));
+    cout << " - Top " << k << " Most Sensitive Stations -" << endl;
+    for (const auto& station : railMan.topAffectedStations(k))
+        cout << station << '\n';
+    cout << flush;
+}
+
+void App::reducedSettingsMenu() {
+    runMenu("Line and Station Failures", {
+            {'1', "Toggle Affected Segments"},
+            {'2', "Toggle Affected Stations"},
+            {'3', "Clear Affected Segments"},
+            {'4', "Clear Affected Stations"},
+            {'c', "Clear All"},
+            {'s', "See Current Settings"},
+            {'x', "Back"}
+    }, [this](char choice) -> bool {
+        switch(choice){
+            case '1': { // Toggle Affected Segments
+                string stationA, stationB;
+                unordered_set<string> stationNames;
+                for (const auto& [name, _] : railMan.stations)
+                    stationNames.insert(name);
+                stationNames.insert("x"); // Cancel Option
+                cin.ignore(); // Ignore \n char from previous choice.
+                while (true) {
+                    stationA = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+                    if (stationA == "x") return true;
+                    stationB = getLine("Destination Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+                    if (stationB == "x") return true;
+                    if (railMan.segmentExists(stationA, stationB)) break;
+                    cout << vertical << ' ' << stationA << " - " << stationB << " Segment doesn't Exist.\n" << getBottomLine() << endl;
+                }
+                for (auto it = segmentsToDeactivate.begin(); it != segmentsToDeactivate.end(); it++)
+                    if (it->first == stationA && it->second == stationB){
+                        segmentsToDeactivate.erase(it);
+                        cout << "Reactivated Segment " << stationA << " - " << stationB << endl;
+                        goto dont_add_segment;
+                    }
+                segmentsToDeactivate.emplace_back(stationA, stationB);
+                cout << "Deactivated Segment " << stationA << " - " << stationB << endl;
+                dont_add_segment:;
+            } break;
+            case '2': { // Toggle Affected Stations
+                string station;
+                unordered_set<string> stationNames;
+                for (const auto& [name, _] : railMan.stations)
+                    stationNames.insert(name);
+                stationNames.insert("x"); // Cancel Option
+                cin.ignore(); // Ignore \n char from previous choice.
+                station = getLine("Station Name (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+                if (station == "x") break;
+                for (auto it = stationsToDeactivate.begin(); it != stationsToDeactivate.end(); it++)
+                    if (*it == station){
+                        stationsToDeactivate.erase(it);
+                        cout << "Reactivated Station " << station << endl;
+                        goto dont_add_station;
+                    }
+                stationsToDeactivate.push_back(station);
+                cout << "Deactivated Station " << station << endl;
+                dont_add_station:;
+            } break;
+            case '3': // Clear Affected Segments
+                segmentsToDeactivate.clear();
+                cout << "Cleared All Segments." << endl;
+                break;
+            case '4': // Clear Affected Stations
+                stationsToDeactivate.clear();
+                cout << "Cleared All Stations." << endl;
+                break;
+            case 'c': // Clear All
+                segmentsToDeactivate.clear();
+                stationsToDeactivate.clear();
+                cout << "Cleared All." << endl;
+                break;
+            case 's': { // See Current Settings
+                cout << " - Affected Stations -\n";
+                for (const auto& station : stationsToDeactivate)
+                    cout << station << '\n';
+                if (stationsToDeactivate.empty()) cout << "None.\n";
+                cout << " - Affected Segments -\n";
+                for (const auto& [stationA, stationB] : segmentsToDeactivate)
+                    cout << stationA  << " - " << stationB << '\n';
+                if (segmentsToDeactivate.empty()) cout << "None.\n";
+                cout << flush;
+            } break;
+            case 'x': return false;
+        }
+        return true;
+    });
+}
+
+
+// =================== //
+// DATA SELECTION MENU //
+// =================== //
 
 void App::dataSelectionMenu() {
     const string title = "Data Selection";

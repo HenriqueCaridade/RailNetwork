@@ -20,6 +20,9 @@ class App {
     const static char vertical = '|';
     const static char horizontal = '-';
 
+    std::list<std::string> stationsToDeactivate;
+    std::list<std::pair<std::string, std::string>> segmentsToDeactivate;
+
     std::string datasetPath;
     RailManager railMan;
 
@@ -94,17 +97,25 @@ class App {
      */
     void dataSelectionMenu();
     /**
-     * Data Selection Menu. (Calls runMenu)
+     * Basic Services Menu. (Calls runMenu)
      */
     void basicServiceMenu();
+    void maxFlowOption();
+    void importantStationsOption();
+    void largerBudgetPlacesOption();
+    void maxFlowStationOption();
     /**
-     * Data Selection Menu. (Calls runMenu)
+     * Cost Menu. (Calls runMenu)
      */
     void costMenu();
+    void maxFlowMinCostOption();
     /**
-     * Data Selection Menu. (Calls runMenu)
+     * Reliability Menu. (Calls runMenu)
      */
     void reliabilityMenu();
+    void maxFlowReducedOption();
+    void mostSensitiveStationsOption();
+    void reducedSettingsMenu();
     /**
      * Runs a menu with the given title, image, options and for every valid option calls f(option) to process choice.
      * @tparam Lambda

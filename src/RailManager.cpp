@@ -107,3 +107,69 @@ void RailManager::initializeData(const string& datasetPath) {
     // string b = "Portalegre";
     // cout << railNet.maxFlow(a,b) << endl;
 }
+
+bool RailManager::segmentExists(const string &origin, const string &destination) {
+    return (segments.find(origin) != segments.end()) && (segments.at(origin).find(destination) != segments.at(origin).end());
+}
+
+bool RailManager::stationExists(const string &station) {
+    return stations.find(station) != stations.end();
+}
+
+void RailManager::reactivateAllStations() {
+    for (auto& [_, node] : railNet.nodes)
+        node.active = true;
+}
+
+void RailManager::reactivateAllSegments() {
+    for (auto& [_, node] : railNet.nodes)
+        for (auto& edge : node.adj)
+            edge.active = true;
+}
+
+void RailManager::deactivateStations(const list<string> &stationsToDeactivate) {
+    for (const string& station : stationsToDeactivate)
+        railNet.getNode(station).active = false;
+}
+
+void RailManager::deactivateSegments(const list<pair<string, string>> &segmentsToDeactivate) {
+    for (const auto& [stationA, stationB] : segmentsToDeactivate)
+        railNet.getEdge(stationA, stationB).active = false;
+}
+
+unsigned RailManager::maxFlow(const string &origin, const string &destination) {
+    return railNet.maxFlow(origin, destination);
+}
+
+list<pair<string, string>> RailManager::importantStations() {
+    return railNet.importantStations();
+}
+
+list<string> RailManager::topMunicipalities(int k) {
+    return railNet.topMunicipalities(k, stations);
+}
+
+list<string> RailManager::topDistricts(int k) {
+    return railNet.topDistricts(k, stations);
+}
+
+unsigned RailManager::maxFlowStation(const string &station) {
+    return railNet.maxFlowStation(station);
+}
+
+unsigned RailManager::maxFlowMinCost(const string &origin, const string &destination) {
+    return railNet.maxFlowMinCost(origin, destination);
+}
+
+unsigned RailManager::maxFlowReduced(const string &origin, const string &destination, const list<pair<string, string>>& segmentsToDeactivate, const list<string>& stationsToDeactivate) {
+    reactivateAllStations();
+    reactivateAllSegments();
+    deactivateSegments(segmentsToDeactivate);
+    deactivateStations(stationsToDeactivate);
+    return railNet.maxFlowReduced(origin, destination);
+}
+
+list<string> RailManager::topAffectedStations(int k) {
+    return railNet.topAffectedStations(k);
+}
+

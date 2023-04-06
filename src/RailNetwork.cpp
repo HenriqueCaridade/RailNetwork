@@ -30,7 +30,7 @@ public:
 
 const std::string RailNetwork::sourceNodeName = "__SOURCE_NODE_NAME__";
 
-const RailNetwork::Node& RailNetwork::getNode(const string &station) {
+RailNetwork::Node& RailNetwork::getNode(const string &station) {
     return nodes.at(station);
 }
 
@@ -38,7 +38,7 @@ void RailNetwork::addNode(const std::string& name, const std::list<Edge>& adj) {
     nodes.insert({name, Node(name, adj)});
 }
 
-RailNetwork::Edge &RailNetwork::getEdge(const std::string& src, const string &dest) {
+RailNetwork::Edge& RailNetwork::getEdge(const std::string& src, const string &dest) {
     for(Edge& edge:nodes.at(src).adj)
         if(edge.dest == dest)
             return edge;
