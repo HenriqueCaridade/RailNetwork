@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "RailManager.h"
-
 using namespace std;
 
 
@@ -10,6 +9,9 @@ RailManager::RailManager() = default;
 
 RailManager::RailManager(const string& datasetPath) {
     initializeData(datasetPath);
+    string a = "Casa Branca";
+    string b = "Portalegre";
+    cout << railNet.maxFlow(a,b) << endl;
 }
 
 void RailManager::addSegment(const string& stationA, const string& stationB, unsigned int capacity, SegmentType service) {

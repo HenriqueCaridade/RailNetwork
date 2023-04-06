@@ -20,12 +20,14 @@ class RailNetwork { // Directed Graph
         SegmentType type;
         const unsigned capacity;
         unsigned flow;
+        bool active;
 
         Edge(std::string origin, std::string dest, SegmentType type, unsigned capacity) :
             origin(std::move(origin)),
             dest(std::move(dest)),
             type(type),
             capacity(capacity),
+            active(true),
             flow(0) {}
     };
 
@@ -35,12 +37,13 @@ class RailNetwork { // Directed Graph
         std::list<Edge> adj;
         bool visited;
         unsigned cost;
-
+        bool active;
         Node(std::string name, std::list<Edge> adj) :
             name(std::move(name)),
             adj(std::move(adj)),
             prev(""),
             visited(false),
+            active(true),
             cost(UINT_MAX){}
     };
 
@@ -59,6 +62,7 @@ class RailNetwork { // Directed Graph
     void addEdge(const std::string& node, const Edge& edge);
     std::list<std::string> BFSFlow(const std::string& src, const std::string& dest);
     std::list<std::list<std::string>> BFSCost(const std::string &src, const std::string &dest);
+    std::list<std::string> BFSActive(const std::string &src, const std::string &dest);
     std::list<std::string> distancedNodes(const std::string& src, unsigned distance);
 public:
     void addNode(const std::string& name, const std::list<Edge>& adj);
@@ -72,6 +76,8 @@ public:
     std::list<std::string> topAffectedStations(int k);
 
     friend class RailManager;
+
+
 };
 
 
