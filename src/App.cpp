@@ -133,7 +133,7 @@ void App::mainMenu() {
             {'x', "Exit App"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case 'd': dataSelectionMenu(); break;
+            case 'd': dataSelectionMenu(); return true;
             case '1': basicServiceMenu(); break;
             case '2': costMenu(); break;
             case '3': reliabilityMenu(); break;
@@ -161,7 +161,7 @@ void App::basicServiceMenu() {
         }
         clear_screen();
         return true;
-    }, false);
+    });
 }
 
 void App::costMenu() {
@@ -175,7 +175,7 @@ void App::costMenu() {
         }
         clear_screen();
         return true;
-    }, false);
+    });
 }
 
 void App::reliabilityMenu() {
@@ -193,7 +193,7 @@ void App::reliabilityMenu() {
         }
         clear_screen();
         return true;
-    }, false);
+    });
 }
 
 void App::dataSelectionMenu() {

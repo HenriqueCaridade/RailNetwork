@@ -14,7 +14,7 @@
  * App takes care of the input and output of the program, it has functions to get multiple different ways to get input and has different ways of outputting information.
  */
 class App {
-    const static int titleSize = 60;
+    const static int titleSize = 65;
     const static int spaceBetween = 2;
     const static char corner = 'o';
     const static char vertical = '|';
