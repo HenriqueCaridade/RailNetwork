@@ -24,7 +24,7 @@ App::App() = default;
 
 
 void App::initializeData() {
-    railMan = RailManager(datasetPath);
+    railMan.initializeData(datasetPath);
 }
 
 
@@ -121,23 +121,74 @@ void App::runMenu(const string &title, const vector<pair<char, string>> &options
 
 void App::start(){
     dataSelectionMenu();
-    initializeData();
     mainMenu();
 }
 
 void App::mainMenu() {
     runMenu("Rail Manager", {
-            {'1', "Option 1"},
-            {'2', "Option 2"},
-            {'3', "Option 3"},
-            {'4', "Option 4"},
+            {'d', "Data Selection"},
+            {'1', "Basic Service Metrics"},
+            {'2', "Operation Cost Optimization"},
+            {'3', "Reliability and Sensitivity to Line Failures"},
             {'x', "Exit App"}
     }, [this](char choice) -> bool {
         switch(choice){
-            case '1': break;
-            case '2': break;
-            case '3': break;
-            case '4': break;
+            case 'd': dataSelectionMenu(); break;
+            case '1': basicServiceMenu(); break;
+            case '2': costMenu(); break;
+            case '3': reliabilityMenu(); break;
+            case 'x': return false;
+        }
+        clear_screen();
+        return true;
+    }, false);
+}
+
+void App::basicServiceMenu() {
+    runMenu("Rail Manager", {
+            {'1', "Max Number of Trains from A to B."},
+            {'2', "Important Stations"},
+            {'3', "Larger Budget Demanding Places"},
+            {'4', "Max Number of Trains that Arrive at a Station"},
+            {'x', "Exit App"}
+    }, [this](char choice) -> bool {
+        switch(choice){
+            case '1': /* TODO */ break;
+            case '2': /* TODO */ break;
+            case '3': /* TODO */ break;
+            case '4': /* TODO */ break;
+            case 'x': return false;
+        }
+        clear_screen();
+        return true;
+    }, false);
+}
+
+void App::costMenu() {
+    runMenu("Rail Manager", {
+            {'1', "Max Amount of Trains that Can Travel with Minimum Cost"},
+            {'x', "Exit App"}
+    }, [this](char choice) -> bool {
+        switch(choice){
+            case '1': /* TODO */ break;
+            case 'x': return false;
+        }
+        clear_screen();
+        return true;
+    }, false);
+}
+
+void App::reliabilityMenu() {
+    runMenu("Rail Manager", {
+            {'1', "Max Flow for Reduced Connectivity"},
+            {'2', "Most Sensitive Stations"},
+            {'3', "Set Line and Station Failures"},
+            {'x', "Exit App"}
+    }, [this](char choice) -> bool {
+        switch(choice){
+            case '1': /* TODO */ break;
+            case '2': /* TODO */ break;
+            case '3': /* TODO: Another Menu*/ break;
             case 'x': return false;
         }
         clear_screen();
@@ -184,5 +235,5 @@ void App::dataSelectionMenu() {
         } else cout << vertical << " Path doesn't contain the necessary files." << endl;
     }
     clear_screen();
+    initializeData();
 }
-

@@ -21,9 +21,11 @@ class RailManager {
     void initializeStations(const CSV& stationsCSV);
     void initializeSegments(const CSV& networkCSV);
     void initializeNetwork();
+    void clearData();
 public:
     RailManager();
     explicit RailManager(const std::string& datasetPath);
+    void initializeData(const std::string& datasetPath);
 
     const Segment& getSegment(const std::string& origin, const std::string& destination);
     const Station& getStation(const std::string& station);

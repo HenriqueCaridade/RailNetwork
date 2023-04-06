@@ -14,7 +14,7 @@
  * App takes care of the input and output of the program, it has functions to get multiple different ways to get input and has different ways of outputting information.
  */
 class App {
-    const static int titleSize = 45;
+    const static int titleSize = 60;
     const static int spaceBetween = 2;
     const static char corner = 'o';
     const static char vertical = '|';
@@ -90,9 +90,21 @@ class App {
      */
     void mainMenu();
     /**
-     * Data Selection Menu. (Calls runMenu)
+     * Data Selection Menu.
      */
     void dataSelectionMenu();
+    /**
+     * Data Selection Menu. (Calls runMenu)
+     */
+    void basicServiceMenu();
+    /**
+     * Data Selection Menu. (Calls runMenu)
+     */
+    void costMenu();
+    /**
+     * Data Selection Menu. (Calls runMenu)
+     */
+    void reliabilityMenu();
     /**
      * Runs a menu with the given title, image, options and for every valid option calls f(option) to process choice.
      * @tparam Lambda

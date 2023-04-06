@@ -9,9 +9,7 @@ using namespace std;
 RailManager::RailManager() = default;
 
 RailManager::RailManager(const string& datasetPath) {
-    initializeStations(CSVReader::read(datasetPath + "stations.csv"));
-    initializeSegments(CSVReader::read(datasetPath + "network.csv"));
-    initializeNetwork();
+    initializeData(datasetPath);
 }
 
 void RailManager::addSegment(const string& stationA, const string& stationB, unsigned int capacity, SegmentType service) {
@@ -61,7 +59,7 @@ void RailManager::initializeSegments(const CSV &networkCSV) {
     unsigned emptyCount = 0, repeatedCount = 0;
     for(int i = 1; i < networkCSV.size(); i++){ // Skip first line
         CSVLine line = networkCSV[i];
-        if (line.size() != 5) continue;
+        if (line.size() != 4) continue;
         // Check If Is Empty Entry
         bool emptyEntry = false;
         for (const string& str : line)
@@ -95,3 +93,15 @@ void RailManager::initializeNetwork() {
     }
 }
 
+void RailManager::clearData() {
+    stations.clear();
+    segments.clear();
+    railNet = RailNetwork();
+}
+
+void RailManager::initializeData(const string& datasetPath) {
+    clearData();
+    initializeStations(CSVReader::read(datasetPath + "stations.csv"));
+    initializeSegments(CSVReader::read(datasetPath + "network.csv"));
+    initializeNetwork();
+}
