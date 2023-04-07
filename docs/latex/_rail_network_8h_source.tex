@@ -1,0 +1,85 @@
+\hypertarget{_rail_network_8h_source}{}\doxysection{Rail\+Network.\+h}
+\label{_rail_network_8h_source}\index{src/RailNetwork.h@{src/RailNetwork.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef RAILNETWORK\_RAILNETWORK\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define RAILNETWORK\_RAILNETWORK\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <unordered\_map>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <utility>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <queue>}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}Segment.h"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}Station.h"{}}}
+\DoxyCodeLine{19 \textcolor{keyword}{class }\mbox{\hyperlink{class_rail_network}{RailNetwork}} \{ \textcolor{comment}{// Directed Graph}}
+\DoxyCodeLine{20     \textcolor{keyword}{static} \textcolor{keyword}{const} std::string sourceNodeName;}
+\DoxyCodeLine{24     \textcolor{keyword}{struct }Edge \{}
+\DoxyCodeLine{25         std::string origin;}
+\DoxyCodeLine{26         std::string dest;}
+\DoxyCodeLine{27         SegmentType type;}
+\DoxyCodeLine{28         \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} capacity;}
+\DoxyCodeLine{29         \textcolor{keywordtype}{unsigned} flow;}
+\DoxyCodeLine{30         \textcolor{keywordtype}{bool} active;}
+\DoxyCodeLine{38         Edge(std::string origin, std::string dest, SegmentType type, \textcolor{keywordtype}{unsigned} capacity) :}
+\DoxyCodeLine{39             origin(std::move(origin)),}
+\DoxyCodeLine{40             dest(std::move(dest)),}
+\DoxyCodeLine{41             type(type),}
+\DoxyCodeLine{42             capacity(capacity),}
+\DoxyCodeLine{43             active(\textcolor{keyword}{true}),}
+\DoxyCodeLine{44             flow(0) \{\}}
+\DoxyCodeLine{45     \};}
+\DoxyCodeLine{49     \textcolor{keyword}{struct }Node \{}
+\DoxyCodeLine{50         std::string name;}
+\DoxyCodeLine{51         std::string prev;}
+\DoxyCodeLine{52         std::list<Edge> adj;}
+\DoxyCodeLine{53         \textcolor{keywordtype}{bool} visited;}
+\DoxyCodeLine{54         \textcolor{keywordtype}{unsigned} cost;}
+\DoxyCodeLine{55         \textcolor{keywordtype}{bool} active;}
+\DoxyCodeLine{61         Node(std::string name, std::list<Edge> adj) :}
+\DoxyCodeLine{62             name(std::move(name)),}
+\DoxyCodeLine{63             adj(std::move(adj)),}
+\DoxyCodeLine{64             prev(\textcolor{stringliteral}{"{}"{}}),}
+\DoxyCodeLine{65             visited(\textcolor{keyword}{false}),}
+\DoxyCodeLine{66             active(\textcolor{keyword}{true}),}
+\DoxyCodeLine{67             cost(UINT\_MAX)\{\}}
+\DoxyCodeLine{68     \};}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70     std::unordered\_map<std::string, Node> nodes;}
+\DoxyCodeLine{76     Node\& getNode(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{83     Edge\& getEdge(\textcolor{keyword}{const} std::string\& src, \textcolor{keyword}{const} std::string\& dest);}
+\DoxyCodeLine{88     \textcolor{keywordtype}{void} visit(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{92     \textcolor{keywordtype}{void} clearVisits();}
+\DoxyCodeLine{96     \textcolor{keywordtype}{void} clearFlow();}
+\DoxyCodeLine{100     \textcolor{keywordtype}{void} clearCost();}
+\DoxyCodeLine{106     \textcolor{keywordtype}{void} setCost(\textcolor{keyword}{const} std::string\& node, \textcolor{keywordtype}{unsigned} cost);}
+\DoxyCodeLine{112     \textcolor{keywordtype}{void} setPrev(\textcolor{keyword}{const} std::string\& node, \textcolor{keyword}{const} std::string\& prev);}
+\DoxyCodeLine{118     \textcolor{keywordtype}{unsigned} getCost(\textcolor{keyword}{const} std::string\& node);}
+\DoxyCodeLine{124     std::list<Edge> getAdj(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{130     \textcolor{keywordtype}{void} addEdge(\textcolor{keyword}{const} std::string\& node, \textcolor{keyword}{const} Edge\& edge);}
+\DoxyCodeLine{137     std::list<std::string> BFSFlow(\textcolor{keyword}{const} std::string\& src, \textcolor{keyword}{const} std::string\& dest);}
+\DoxyCodeLine{144     std::list<std::list<std::string>> BFSCost(\textcolor{keyword}{const} std::string \&src, \textcolor{keyword}{const} std::string \&dest);}
+\DoxyCodeLine{151     std::list<std::string> BFSActive(\textcolor{keyword}{const} std::string \&src, \textcolor{keyword}{const} std::string \&dest);}
+\DoxyCodeLine{158     std::list<std::string> distancedNodes(\textcolor{keyword}{const} std::string\& src, \textcolor{keywordtype}{unsigned} distance);}
+\DoxyCodeLine{159 \textcolor{keyword}{public}:}
+\DoxyCodeLine{165     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_network_ac8efb8a41ea41218dfb2f3cf459e9e3e}{addNode}}(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} std::list<Edge>\& adj);}
+\DoxyCodeLine{172     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_network_ab3d101206f12a21fc6aab076e06afca4}{maxFlow}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{177     std::list<std::pair<std::string, std::string>> \mbox{\hyperlink{class_rail_network_aae3d85440274019f06d755b860d73f8f}{importantStations}}();}
+\DoxyCodeLine{184     std::list<std::string> \mbox{\hyperlink{class_rail_network_af98170ced80a60539b4c7231bd1496b2}{topMunicipalities}}(\textcolor{keywordtype}{int} k, \textcolor{keyword}{const} std::unordered\_map<std::string, Station>\& stations);}
+\DoxyCodeLine{191     std::list<std::string> \mbox{\hyperlink{class_rail_network_a95f281ccdee13d19b63ed43cf1a769db}{topDistricts}}(\textcolor{keywordtype}{int} k, \textcolor{keyword}{const} std::unordered\_map<std::string, Station>\& stations);}
+\DoxyCodeLine{197     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_network_a352b4c6d64064157ecca1c4ea7188d42}{maxFlowStation}}(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{204     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_network_a1552fd9cae7c4887e039daf3c2ff01f4}{maxFlowMinCost}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{211     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_network_a235230716ef557bf539e60f2125bb5f1}{maxFlowReduced}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{219     std::list<std::string> \mbox{\hyperlink{class_rail_network_a43ce7e6f44e792e5fc58c9830d2023b4}{topAffectedStations}}(\textcolor{keywordtype}{int} k,  \textcolor{keyword}{const} std::unordered\_map<std::string, Station>\& stations );}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221     \textcolor{keyword}{friend} \textcolor{keyword}{class }\mbox{\hyperlink{class_rail_manager}{RailManager}};}
+\DoxyCodeLine{222     \textcolor{keyword}{friend} \textcolor{keyword}{class }\mbox{\hyperlink{class_app}{App}};}
+\DoxyCodeLine{223 \};}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225 }
+\DoxyCodeLine{226 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//RAILNETWORK\_RAILNETWORK\_H}}
+
+\end{DoxyCode}

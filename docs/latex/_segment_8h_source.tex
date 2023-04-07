@@ -1,0 +1,35 @@
+\hypertarget{_segment_8h_source}{}\doxysection{Segment.\+h}
+\label{_segment_8h_source}\index{src/Segment.h@{src/Segment.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef RAILNETWORK\_SEGMENT\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define RAILNETWORK\_SEGMENT\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <utility>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{enum} SegmentType \{}
+\DoxyCodeLine{10     INVALID,}
+\DoxyCodeLine{11     STANDARD,}
+\DoxyCodeLine{12     ALFA\_PENDULAR}
+\DoxyCodeLine{13 \};}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{18 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_segment}{Segment}} \{}
+\DoxyCodeLine{19     std::string origin;}
+\DoxyCodeLine{20     std::string destination;}
+\DoxyCodeLine{21     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} capacity;}
+\DoxyCodeLine{22     SegmentType service;}
+\DoxyCodeLine{30     \mbox{\hyperlink{struct_segment_ada4087b37ce2e7bd1b91172f40dcf2d0}{Segment}}(std::string origin, std::string destination, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} capacity, SegmentType service) :}
+\DoxyCodeLine{31             origin(std::move(origin)),}
+\DoxyCodeLine{32             destination(std::move(destination)),}
+\DoxyCodeLine{33             capacity(capacity),}
+\DoxyCodeLine{34             service(service) \{\};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \};}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//RAILNETWORK\_SEGMENT\_H}}
+
+\end{DoxyCode}

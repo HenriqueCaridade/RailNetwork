@@ -1,0 +1,29 @@
+\hypertarget{_station_8h_source}{}\doxysection{Station.\+h}
+\label{_station_8h_source}\index{src/Station.h@{src/Station.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef RAILNETWORK\_STATION\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define RAILNETWORK\_STATION\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <utility>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{11 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_station}{Station}} \{}
+\DoxyCodeLine{12     std::string name;}
+\DoxyCodeLine{13     std::string district;}
+\DoxyCodeLine{14     std::string municipality;}
+\DoxyCodeLine{15     std::string township;}
+\DoxyCodeLine{16     std::string line;}
+\DoxyCodeLine{25     \mbox{\hyperlink{struct_station_ab7f34f62cb4075fd88400a5678300a14}{Station}}(std::string name, std::string district, std::string municipality, std::string township, std::string line) :}
+\DoxyCodeLine{26             name(std::move(name)),}
+\DoxyCodeLine{27             district(std::move(district)),}
+\DoxyCodeLine{28             municipality(std::move(municipality)),}
+\DoxyCodeLine{29             township(std::move(township)),}
+\DoxyCodeLine{30             line(std::move(line)) \{\};}
+\DoxyCodeLine{31 \};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//RAILNETWORK\_STATION\_H}}
+
+\end{DoxyCode}

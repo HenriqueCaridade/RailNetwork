@@ -1,0 +1,180 @@
+\hypertarget{class_rail_network}{}\doxysection{Rail\+Network Class Reference}
+\label{class_rail_network}\index{RailNetwork@{RailNetwork}}
+
+
+{\ttfamily \#include $<$Rail\+Network.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_rail_network_ac8efb8a41ea41218dfb2f3cf459e9e3e}{add\+Node}} (const std\+::string \&name, const std\+::list$<$ Edge $>$ \&adj)
+\item 
+unsigned \mbox{\hyperlink{class_rail_network_ab3d101206f12a21fc6aab076e06afca4}{max\+Flow}} (const std\+::string \&origin, const std\+::string \&destination)
+\item 
+std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \mbox{\hyperlink{class_rail_network_aae3d85440274019f06d755b860d73f8f}{important\+Stations}} ()
+\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_network_af98170ced80a60539b4c7231bd1496b2}{top\+Municipalities}} (int k, const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&stations)
+\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_network_a95f281ccdee13d19b63ed43cf1a769db}{top\+Districts}} (int k, const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&stations)
+\item 
+unsigned \mbox{\hyperlink{class_rail_network_a352b4c6d64064157ecca1c4ea7188d42}{max\+Flow\+Station}} (const std\+::string \&station)
+\item 
+unsigned \mbox{\hyperlink{class_rail_network_a1552fd9cae7c4887e039daf3c2ff01f4}{max\+Flow\+Min\+Cost}} (const std\+::string \&origin, const std\+::string \&destination)
+\item 
+unsigned \mbox{\hyperlink{class_rail_network_a235230716ef557bf539e60f2125bb5f1}{max\+Flow\+Reduced}} (const std\+::string \&origin, const std\+::string \&destination)
+\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_network_a43ce7e6f44e792e5fc58c9830d2023b4}{top\+Affected\+Stations}} (int k, const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&stations)
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_rail_network_a2d3bc19a712e47568bf287ca681ff2a8}\label{class_rail_network_a2d3bc19a712e47568bf287ca681ff2a8}} 
+class {\bfseries Rail\+Manager}
+\item 
+\mbox{\Hypertarget{class_rail_network_a4097b3e04a4f8ece21f5abe1b10e6323}\label{class_rail_network_a4097b3e04a4f8ece21f5abe1b10e6323}} 
+class {\bfseries App}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_rail_network}{Rail\+Network}} class represents a directed graph that models a rail network system. It provides methods to calculate maximum flow and other network analysis functions. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_rail_network_ac8efb8a41ea41218dfb2f3cf459e9e3e}\label{class_rail_network_ac8efb8a41ea41218dfb2f3cf459e9e3e}} 
+\index{RailNetwork@{RailNetwork}!addNode@{addNode}}
+\index{addNode@{addNode}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{addNode()}{addNode()}}
+{\footnotesize\ttfamily void Rail\+Network\+::add\+Node (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const std\+::list$<$ Edge $>$ \&}]{adj }\end{DoxyParamCaption})}
+
+Adds a node with the specified name and list of adjacent edges to the rail network. 
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the node to be added. \\
+\hline
+{\em adj} & The list of adjacent edges for the new node. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_rail_network_aae3d85440274019f06d755b860d73f8f}\label{class_rail_network_aae3d85440274019f06d755b860d73f8f}} 
+\index{RailNetwork@{RailNetwork}!importantStations@{importantStations}}
+\index{importantStations@{importantStations}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{importantStations()}{importantStations()}}
+{\footnotesize\ttfamily list$<$ pair$<$ string, string $>$ $>$ Rail\+Network\+::important\+Stations (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a list of all important stations in the rail network. Importance is based on the number of paths that pass through the station. \begin{DoxyReturn}{Returns}
+A list of all important stations in the rail network. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_ab3d101206f12a21fc6aab076e06afca4}\label{class_rail_network_ab3d101206f12a21fc6aab076e06afca4}} 
+\index{RailNetwork@{RailNetwork}!maxFlow@{maxFlow}}
+\index{maxFlow@{maxFlow}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{maxFlow()}{maxFlow()}}
+{\footnotesize\ttfamily unsigned Rail\+Network\+::max\+Flow (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+Calculates and returns the maximum flow between two nodes in the rail network using the Ford-\/\+Fulkerson algorithm. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin node. \\
+\hline
+{\em destination} & The name of the destination node. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow between the origin and destination nodes. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_a1552fd9cae7c4887e039daf3c2ff01f4}\label{class_rail_network_a1552fd9cae7c4887e039daf3c2ff01f4}} 
+\index{RailNetwork@{RailNetwork}!maxFlowMinCost@{maxFlowMinCost}}
+\index{maxFlowMinCost@{maxFlowMinCost}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{maxFlowMinCost()}{maxFlowMinCost()}}
+{\footnotesize\ttfamily unsigned Rail\+Network\+::max\+Flow\+Min\+Cost (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+Calculates and returns the maximum flow between two nodes in the rail network using the Ford-\/\+Fulkerson algorithm with minimum cost. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin node. \\
+\hline
+{\em destination} & The name of the destination node. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow between the origin and destination nodes with minimum cost. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_a235230716ef557bf539e60f2125bb5f1}\label{class_rail_network_a235230716ef557bf539e60f2125bb5f1}} 
+\index{RailNetwork@{RailNetwork}!maxFlowReduced@{maxFlowReduced}}
+\index{maxFlowReduced@{maxFlowReduced}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{maxFlowReduced()}{maxFlowReduced()}}
+{\footnotesize\ttfamily unsigned Rail\+Network\+::max\+Flow\+Reduced (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+Calculates and returns the maximum flow between two nodes in the rail network using the reduced-\/cost augmenting path algorithm. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin node. \\
+\hline
+{\em destination} & The name of the destination node. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow between the origin and destination nodes. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_a352b4c6d64064157ecca1c4ea7188d42}\label{class_rail_network_a352b4c6d64064157ecca1c4ea7188d42}} 
+\index{RailNetwork@{RailNetwork}!maxFlowStation@{maxFlowStation}}
+\index{maxFlowStation@{maxFlowStation}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{maxFlowStation()}{maxFlowStation()}}
+{\footnotesize\ttfamily unsigned Rail\+Network\+::max\+Flow\+Station (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{station }\end{DoxyParamCaption})}
+
+Calculates and returns the maximum flow that passes through a specific station in the rail network. 
+\begin{DoxyParams}{Parameters}
+{\em station} & The name of the station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow that passes through the station. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_a43ce7e6f44e792e5fc58c9830d2023b4}\label{class_rail_network_a43ce7e6f44e792e5fc58c9830d2023b4}} 
+\index{RailNetwork@{RailNetwork}!topAffectedStations@{topAffectedStations}}
+\index{topAffectedStations@{topAffectedStations}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{topAffectedStations()}{topAffectedStations()}}
+{\footnotesize\ttfamily list$<$ string $>$ Rail\+Network\+::top\+Affected\+Stations (\begin{DoxyParamCaption}\item[{int}]{k,  }\item[{const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&}]{stations }\end{DoxyParamCaption})}
+
+Returns a list of the top k affected stations, i.\+e. stations with the highest total flow of passengers in both directions during the day. 
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of stations to return. \\
+\hline
+{\em stations} & The map of stations. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the names of the top k affected stations. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_a95f281ccdee13d19b63ed43cf1a769db}\label{class_rail_network_a95f281ccdee13d19b63ed43cf1a769db}} 
+\index{RailNetwork@{RailNetwork}!topDistricts@{topDistricts}}
+\index{topDistricts@{topDistricts}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{topDistricts()}{topDistricts()}}
+{\footnotesize\ttfamily list$<$ string $>$ Rail\+Network\+::top\+Districts (\begin{DoxyParamCaption}\item[{int}]{k,  }\item[{const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&}]{stations }\end{DoxyParamCaption})}
+
+Returns a list of the top k districts in the rail network based on the number of stations within their borders. 
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of top districts to return. \\
+\hline
+{\em stations} & An unordered map of station names to station objects. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the top k districts in the rail network. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_network_af98170ced80a60539b4c7231bd1496b2}\label{class_rail_network_af98170ced80a60539b4c7231bd1496b2}} 
+\index{RailNetwork@{RailNetwork}!topMunicipalities@{topMunicipalities}}
+\index{topMunicipalities@{topMunicipalities}!RailNetwork@{RailNetwork}}
+\doxysubsubsection{\texorpdfstring{topMunicipalities()}{topMunicipalities()}}
+{\footnotesize\ttfamily list$<$ string $>$ Rail\+Network\+::top\+Municipalities (\begin{DoxyParamCaption}\item[{int}]{k,  }\item[{const std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{struct_station}{Station}} $>$ \&}]{stations }\end{DoxyParamCaption})}
+
+Returns a list of the top k municipalities in the rail network based on the number of stations within their borders. 
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of top municipalities to return. \\
+\hline
+{\em stations} & An unordered map of station names to station objects. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the top k municipalities in the rail network. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Rail\+Network.\+h\item 
+src/Rail\+Network.\+cpp\end{DoxyCompactItemize}

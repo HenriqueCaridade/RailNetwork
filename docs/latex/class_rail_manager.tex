@@ -1,0 +1,374 @@
+\hypertarget{class_rail_manager}{}\doxysection{Rail\+Manager Class Reference}
+\label{class_rail_manager}\index{RailManager@{RailManager}}
+
+
+A class representing the rail network manager. This class manages a rail network, composed of stations and segments connecting them. It provides various methods to query information about the network, such as maximum flow, top municipalities, top districts, etc. It also provides methods to activate and deactivate stations and segments, allowing for simulating maintenance or damage to the network.  
+
+
+
+
+{\ttfamily \#include $<$Rail\+Manager.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_rail_manager_a866e44071a2a7d6b3f7fdecd1d01f594}{Rail\+Manager}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_rail_manager_abb66f38d5f0cd0b505e1bb173d529126}{Rail\+Manager}} (const std\+::string \&dataset\+Path)
+\begin{DoxyCompactList}\small\item\em Constructs a new \mbox{\hyperlink{class_rail_manager}{Rail\+Manager}} object and initializes it with data on the dataset\+Path. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_rail_manager_ab540b431768843de5c57f14f1f88fa0c}{initialize\+Data}} (const std\+::string \&dataset\+Path)
+\begin{DoxyCompactList}\small\item\em Initializes the \mbox{\hyperlink{class_rail_manager}{Rail\+Manager}} object with data from a CSV file. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_segment}{Segment}} \& \mbox{\hyperlink{class_rail_manager_af2cce13a7f3961e3c4ebc076c7f985cb}{get\+Segment}} (const std\+::string \&origin, const std\+::string \&destination)
+\begin{DoxyCompactList}\small\item\em Gets the segment between two stations. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_station}{Station}} \& \mbox{\hyperlink{class_rail_manager_afc3d0584eda77868c32096a9cd63038e}{get\+Station}} (const std\+::string \&station)
+\begin{DoxyCompactList}\small\item\em Gets the station with the given name. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{class_rail_manager_a23aefa066d5ec9d49f9fad6776a8eeae}{max\+Flow}} (const std\+::string \&origin, const std\+::string \&destination)
+\begin{DoxyCompactList}\small\item\em Calculates the maximum flow between two stations. \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \mbox{\hyperlink{class_rail_manager_a5596622b75c819f1986d0f931f525c05}{important\+Stations}} ()
+\begin{DoxyCompactList}\small\item\em Gets a list of the most important stations in the network, in order of importance. \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_manager_a046482029001758b66a00d4a3ad42750}{top\+Municipalities}} (int k)
+\begin{DoxyCompactList}\small\item\em Gets a list of the top k municipalities in the network, ranked by the number of stations they contain. \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_manager_a805ec27686f89282eeb292d4ff9ff7fc}{top\+Districts}} (int k)
+\begin{DoxyCompactList}\small\item\em Gets the top k districts with the most stations. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{class_rail_manager_adede15d95a723503cb30783cad1a6daf}{max\+Flow\+Station}} (const std\+::string \&station)
+\begin{DoxyCompactList}\small\item\em Computes the maximum flow that can pass through a given station. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{class_rail_manager_a016ea20c36556967130d4d70612cb973}{max\+Flow\+Min\+Cost}} (const std\+::string \&origin, const std\+::string \&destination)
+\begin{DoxyCompactList}\small\item\em Computes the maximum flow between two stations with minimum cost. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{class_rail_manager_a830ab7ce1e7e19785414c527391805ed}{max\+Flow\+Reduced}} (const std\+::string \&origin, const std\+::string \&destination, const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&segments\+To\+Deactivate, const std\+::list$<$ std\+::string $>$ \&stations\+To\+Deactivate)
+\begin{DoxyCompactList}\small\item\em Computes the maximum flow between two stations with some segments and/or stations deactivated. \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{class_rail_manager_a09148d4fc0dcce3b131ecefedc7287bc}{top\+Affected\+Stations}} (int k, const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&segments\+To\+Deactivate, const std\+::list$<$ std\+::string $>$ \&stations\+To\+Deactivate)
+\begin{DoxyCompactList}\small\item\em Gets the top k stations that are most affected by the given segments and/or stations being deactivated. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_rail_manager_abdee8943a3093e3f084a95a7eb8a47fb}{segment\+Exists}} (const std\+::string \&origin, const std\+::string \&destination)
+\begin{DoxyCompactList}\small\item\em Checks if a segment exists between two stations. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_rail_manager_a014a5561207823cf8056c0fe6da94432}{station\+Exists}} (const std\+::string \&station)
+\begin{DoxyCompactList}\small\item\em Checks if a station exists. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_rail_manager_a7b6e456b0b4af147f1e44cebfd4e05da}\label{class_rail_manager_a7b6e456b0b4af147f1e44cebfd4e05da}} 
+void {\bfseries reactivate\+All\+Stations} ()
+\begin{DoxyCompactList}\small\item\em Reactivates all stations that have been deactivated. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_rail_manager_aa16c373c3aa8aad74185d9d194c01c17}\label{class_rail_manager_aa16c373c3aa8aad74185d9d194c01c17}} 
+void {\bfseries reactivate\+All\+Segments} ()
+\begin{DoxyCompactList}\small\item\em Reactivates all segments that have been deactivated. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_rail_manager_a684f7a62a73229deff5fba87a79773ad}{deactivate\+Stations}} (const std\+::list$<$ std\+::string $>$ \&stations)
+\begin{DoxyCompactList}\small\item\em Deactivates the given list of stations. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_rail_manager_aadc781e20e55cbb6dace320ac3df5272}{deactivate\+Segments}} (const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&segments)
+\begin{DoxyCompactList}\small\item\em Deactivates the given list of segments. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_rail_manager_a4097b3e04a4f8ece21f5abe1b10e6323}\label{class_rail_manager_a4097b3e04a4f8ece21f5abe1b10e6323}} 
+class {\bfseries App}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class representing the rail network manager. This class manages a rail network, composed of stations and segments connecting them. It provides various methods to query information about the network, such as maximum flow, top municipalities, top districts, etc. It also provides methods to activate and deactivate stations and segments, allowing for simulating maintenance or damage to the network. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_rail_manager_a866e44071a2a7d6b3f7fdecd1d01f594}\label{class_rail_manager_a866e44071a2a7d6b3f7fdecd1d01f594}} 
+\index{RailManager@{RailManager}!RailManager@{RailManager}}
+\index{RailManager@{RailManager}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{RailManager()}{RailManager()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Rail\+Manager\+::\+Rail\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default constructor. 
+
+Creates a new empty rail network manager. \mbox{\Hypertarget{class_rail_manager_abb66f38d5f0cd0b505e1bb173d529126}\label{class_rail_manager_abb66f38d5f0cd0b505e1bb173d529126}} 
+\index{RailManager@{RailManager}!RailManager@{RailManager}}
+\index{RailManager@{RailManager}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{RailManager()}{RailManager()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Rail\+Manager\+::\+Rail\+Manager (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{dataset\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a new \mbox{\hyperlink{class_rail_manager}{Rail\+Manager}} object and initializes it with data on the dataset\+Path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dataset\+Path} & The path to the directory containing the CSV files. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_rail_manager_aadc781e20e55cbb6dace320ac3df5272}\label{class_rail_manager_aadc781e20e55cbb6dace320ac3df5272}} 
+\index{RailManager@{RailManager}!deactivateSegments@{deactivateSegments}}
+\index{deactivateSegments@{deactivateSegments}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{deactivateSegments()}{deactivateSegments()}}
+{\footnotesize\ttfamily void Rail\+Manager\+::deactivate\+Segments (\begin{DoxyParamCaption}\item[{const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&}]{segments }\end{DoxyParamCaption})}
+
+
+
+Deactivates the given list of segments. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em segments} & A list of pairs of stations that represent the segments to deactivate. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_rail_manager_a684f7a62a73229deff5fba87a79773ad}\label{class_rail_manager_a684f7a62a73229deff5fba87a79773ad}} 
+\index{RailManager@{RailManager}!deactivateStations@{deactivateStations}}
+\index{deactivateStations@{deactivateStations}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{deactivateStations()}{deactivateStations()}}
+{\footnotesize\ttfamily void Rail\+Manager\+::deactivate\+Stations (\begin{DoxyParamCaption}\item[{const std\+::list$<$ std\+::string $>$ \&}]{stations }\end{DoxyParamCaption})}
+
+
+
+Deactivates the given list of stations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stations} & A list of names of stations to deactivate. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_rail_manager_af2cce13a7f3961e3c4ebc076c7f985cb}\label{class_rail_manager_af2cce13a7f3961e3c4ebc076c7f985cb}} 
+\index{RailManager@{RailManager}!getSegment@{getSegment}}
+\index{getSegment@{getSegment}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{getSegment()}{getSegment()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{struct_segment}{Segment}} \& Rail\+Manager\+::get\+Segment (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+
+
+Gets the segment between two stations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin station. \\
+\hline
+{\em destination} & The name of the destination station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The segment object between the two stations. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_afc3d0584eda77868c32096a9cd63038e}\label{class_rail_manager_afc3d0584eda77868c32096a9cd63038e}} 
+\index{RailManager@{RailManager}!getStation@{getStation}}
+\index{getStation@{getStation}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{getStation()}{getStation()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{struct_station}{Station}} \& Rail\+Manager\+::get\+Station (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{station }\end{DoxyParamCaption})}
+
+
+
+Gets the station with the given name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em station} & The name of the station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The station object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a5596622b75c819f1986d0f931f525c05}\label{class_rail_manager_a5596622b75c819f1986d0f931f525c05}} 
+\index{RailManager@{RailManager}!importantStations@{importantStations}}
+\index{importantStations@{importantStations}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{importantStations()}{importantStations()}}
+{\footnotesize\ttfamily list$<$ pair$<$ string, string $>$ $>$ Rail\+Manager\+::important\+Stations (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets a list of the most important stations in the network, in order of importance. 
+
+\begin{DoxyReturn}{Returns}
+A list of pairs of station names and their corresponding importance values. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_ab540b431768843de5c57f14f1f88fa0c}\label{class_rail_manager_ab540b431768843de5c57f14f1f88fa0c}} 
+\index{RailManager@{RailManager}!initializeData@{initializeData}}
+\index{initializeData@{initializeData}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{initializeData()}{initializeData()}}
+{\footnotesize\ttfamily void Rail\+Manager\+::initialize\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{dataset\+Path }\end{DoxyParamCaption})}
+
+
+
+Initializes the \mbox{\hyperlink{class_rail_manager}{Rail\+Manager}} object with data from a CSV file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dataset\+Path} & The path to the directory containing the CSV files. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_rail_manager_a23aefa066d5ec9d49f9fad6776a8eeae}\label{class_rail_manager_a23aefa066d5ec9d49f9fad6776a8eeae}} 
+\index{RailManager@{RailManager}!maxFlow@{maxFlow}}
+\index{maxFlow@{maxFlow}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{maxFlow()}{maxFlow()}}
+{\footnotesize\ttfamily unsigned Rail\+Manager\+::max\+Flow (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+
+
+Calculates the maximum flow between two stations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin station. \\
+\hline
+{\em destination} & The name of the destination station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow between the two stations. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a016ea20c36556967130d4d70612cb973}\label{class_rail_manager_a016ea20c36556967130d4d70612cb973}} 
+\index{RailManager@{RailManager}!maxFlowMinCost@{maxFlowMinCost}}
+\index{maxFlowMinCost@{maxFlowMinCost}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{maxFlowMinCost()}{maxFlowMinCost()}}
+{\footnotesize\ttfamily unsigned Rail\+Manager\+::max\+Flow\+Min\+Cost (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+
+
+Computes the maximum flow between two stations with minimum cost. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin station. \\
+\hline
+{\em destination} & The name of the destination station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow that can pass through the two stations with minimum cost. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a830ab7ce1e7e19785414c527391805ed}\label{class_rail_manager_a830ab7ce1e7e19785414c527391805ed}} 
+\index{RailManager@{RailManager}!maxFlowReduced@{maxFlowReduced}}
+\index{maxFlowReduced@{maxFlowReduced}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{maxFlowReduced()}{maxFlowReduced()}}
+{\footnotesize\ttfamily unsigned Rail\+Manager\+::max\+Flow\+Reduced (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination,  }\item[{const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&}]{segments\+To\+Deactivate,  }\item[{const std\+::list$<$ std\+::string $>$ \&}]{stations\+To\+Deactivate }\end{DoxyParamCaption})}
+
+
+
+Computes the maximum flow between two stations with some segments and/or stations deactivated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin station. \\
+\hline
+{\em destination} & The name of the destination station. \\
+\hline
+{\em segments\+To\+Deactivate} & A list of pairs of stations that represent the segments to deactivate. \\
+\hline
+{\em stations\+To\+Deactivate} & A list of names of stations to deactivate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow that can pass through the two stations with the given segments and/or stations deactivated. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_adede15d95a723503cb30783cad1a6daf}\label{class_rail_manager_adede15d95a723503cb30783cad1a6daf}} 
+\index{RailManager@{RailManager}!maxFlowStation@{maxFlowStation}}
+\index{maxFlowStation@{maxFlowStation}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{maxFlowStation()}{maxFlowStation()}}
+{\footnotesize\ttfamily unsigned Rail\+Manager\+::max\+Flow\+Station (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{station }\end{DoxyParamCaption})}
+
+
+
+Computes the maximum flow that can pass through a given station. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em station} & The name of the station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum flow that can pass through the given station. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_abdee8943a3093e3f084a95a7eb8a47fb}\label{class_rail_manager_abdee8943a3093e3f084a95a7eb8a47fb}} 
+\index{RailManager@{RailManager}!segmentExists@{segmentExists}}
+\index{segmentExists@{segmentExists}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{segmentExists()}{segmentExists()}}
+{\footnotesize\ttfamily bool Rail\+Manager\+::segment\+Exists (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{origin,  }\item[{const std\+::string \&}]{destination }\end{DoxyParamCaption})}
+
+
+
+Checks if a segment exists between two stations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em origin} & The name of the origin station. \\
+\hline
+{\em destination} & The name of the destination station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if a segment exists between the two stations, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a014a5561207823cf8056c0fe6da94432}\label{class_rail_manager_a014a5561207823cf8056c0fe6da94432}} 
+\index{RailManager@{RailManager}!stationExists@{stationExists}}
+\index{stationExists@{stationExists}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{stationExists()}{stationExists()}}
+{\footnotesize\ttfamily bool Rail\+Manager\+::station\+Exists (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{station }\end{DoxyParamCaption})}
+
+
+
+Checks if a station exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em station} & The name of the station. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the station exists, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a09148d4fc0dcce3b131ecefedc7287bc}\label{class_rail_manager_a09148d4fc0dcce3b131ecefedc7287bc}} 
+\index{RailManager@{RailManager}!topAffectedStations@{topAffectedStations}}
+\index{topAffectedStations@{topAffectedStations}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{topAffectedStations()}{topAffectedStations()}}
+{\footnotesize\ttfamily std\+::list$<$ std\+::string $>$ Rail\+Manager\+::top\+Affected\+Stations (\begin{DoxyParamCaption}\item[{int}]{k,  }\item[{const std\+::list$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \&}]{segments\+To\+Deactivate,  }\item[{const std\+::list$<$ std\+::string $>$ \&}]{stations\+To\+Deactivate }\end{DoxyParamCaption})}
+
+
+
+Gets the top k stations that are most affected by the given segments and/or stations being deactivated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of top affected stations to return. \\
+\hline
+{\em segments\+To\+Deactivate} & A list of pairs of stations that represent the segments to deactivate. \\
+\hline
+{\em stations\+To\+Deactivate} & A list of names of stations to deactivate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the names of the top k stations that are most affected by the given segments and/or stations being deactivated. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a805ec27686f89282eeb292d4ff9ff7fc}\label{class_rail_manager_a805ec27686f89282eeb292d4ff9ff7fc}} 
+\index{RailManager@{RailManager}!topDistricts@{topDistricts}}
+\index{topDistricts@{topDistricts}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{topDistricts()}{topDistricts()}}
+{\footnotesize\ttfamily list$<$ string $>$ Rail\+Manager\+::top\+Districts (\begin{DoxyParamCaption}\item[{int}]{k }\end{DoxyParamCaption})}
+
+
+
+Gets the top k districts with the most stations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of top districts to return. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the names of the top k districts. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_rail_manager_a046482029001758b66a00d4a3ad42750}\label{class_rail_manager_a046482029001758b66a00d4a3ad42750}} 
+\index{RailManager@{RailManager}!topMunicipalities@{topMunicipalities}}
+\index{topMunicipalities@{topMunicipalities}!RailManager@{RailManager}}
+\doxysubsubsection{\texorpdfstring{topMunicipalities()}{topMunicipalities()}}
+{\footnotesize\ttfamily list$<$ string $>$ Rail\+Manager\+::top\+Municipalities (\begin{DoxyParamCaption}\item[{int}]{k }\end{DoxyParamCaption})}
+
+
+
+Gets a list of the top k municipalities in the network, ranked by the number of stations they contain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em k} & The number of municipalities to include in the list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of the names of the top k municipalities. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Rail\+Manager.\+h\item 
+src/Rail\+Manager.\+cpp\end{DoxyCompactItemize}

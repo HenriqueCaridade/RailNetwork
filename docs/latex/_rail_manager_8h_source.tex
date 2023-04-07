@@ -1,0 +1,54 @@
+\hypertarget{_rail_manager_8h_source}{}\doxysection{Rail\+Manager.\+h}
+\label{_rail_manager_8h_source}\index{src/RailManager.h@{src/RailManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef RAILNETWORK\_RAILMANAGER\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define RAILNETWORK\_RAILMANAGER\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <unordered\_map>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}RailNetwork.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}CSVReader.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}Station.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{19 \textcolor{keyword}{class }\mbox{\hyperlink{class_rail_manager}{RailManager}} \{}
+\DoxyCodeLine{20     std::unordered\_map<std::string, Station> stations;}
+\DoxyCodeLine{21     std::unordered\_map<std::string, std::unordered\_map<std::string, Segment>> segments;}
+\DoxyCodeLine{22     \mbox{\hyperlink{class_rail_network}{RailNetwork}} railNet;}
+\DoxyCodeLine{31     \textcolor{keywordtype}{void} addSegment(\textcolor{keyword}{const} std::string \&stationA, \textcolor{keyword}{const} std::string \&stationB, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} capacity, SegmentType service);}
+\DoxyCodeLine{41     \textcolor{keywordtype}{void} addStation(\textcolor{keyword}{const} std::string \&name, \textcolor{keyword}{const} std::string \&district, \textcolor{keyword}{const} std::string \&municipality, \textcolor{keyword}{const} std::string \&township, \textcolor{keyword}{const} std::string \&line);}
+\DoxyCodeLine{47     \textcolor{keywordtype}{void} initializeStations(\textcolor{keyword}{const} CSV\& stationsCSV);}
+\DoxyCodeLine{53     \textcolor{keywordtype}{void} initializeSegments(\textcolor{keyword}{const} CSV\& networkCSV);}
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} initializeNetwork();}
+\DoxyCodeLine{63     \textcolor{keywordtype}{void} clearData();}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{keyword}{public}:}
+\DoxyCodeLine{71     \mbox{\hyperlink{class_rail_manager_a866e44071a2a7d6b3f7fdecd1d01f594}{RailManager}}();}
+\DoxyCodeLine{76     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_rail_manager_abb66f38d5f0cd0b505e1bb173d529126}{RailManager}}(\textcolor{keyword}{const} std::string\& datasetPath);}
+\DoxyCodeLine{81     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_manager_ab540b431768843de5c57f14f1f88fa0c}{initializeData}}(\textcolor{keyword}{const} std::string\& datasetPath);}
+\DoxyCodeLine{88     \textcolor{keyword}{const} \mbox{\hyperlink{struct_segment}{Segment}}\& \mbox{\hyperlink{class_rail_manager_af2cce13a7f3961e3c4ebc076c7f985cb}{getSegment}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{94     \textcolor{keyword}{const} \mbox{\hyperlink{struct_station}{Station}}\& \mbox{\hyperlink{class_rail_manager_afc3d0584eda77868c32096a9cd63038e}{getStation}}(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{101     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_manager_a23aefa066d5ec9d49f9fad6776a8eeae}{maxFlow}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{106     std::list<std::pair<std::string, std::string>> \mbox{\hyperlink{class_rail_manager_a5596622b75c819f1986d0f931f525c05}{importantStations}}();}
+\DoxyCodeLine{112     std::list<std::string> \mbox{\hyperlink{class_rail_manager_a046482029001758b66a00d4a3ad42750}{topMunicipalities}}(\textcolor{keywordtype}{int} k);}
+\DoxyCodeLine{118     std::list<std::string> \mbox{\hyperlink{class_rail_manager_a805ec27686f89282eeb292d4ff9ff7fc}{topDistricts}}(\textcolor{keywordtype}{int} k);}
+\DoxyCodeLine{124     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_manager_adede15d95a723503cb30783cad1a6daf}{maxFlowStation}}(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{131     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_manager_a016ea20c36556967130d4d70612cb973}{maxFlowMinCost}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{140     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_rail_manager_a830ab7ce1e7e19785414c527391805ed}{maxFlowReduced}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination, \textcolor{keyword}{const} std::list<std::pair<std::string, std::string>>\& segmentsToDeactivate, \textcolor{keyword}{const} std::list<std::string>\& stationsToDeactivate);}
+\DoxyCodeLine{148     std::list<std::string> \mbox{\hyperlink{class_rail_manager_a09148d4fc0dcce3b131ecefedc7287bc}{topAffectedStations}}(\textcolor{keywordtype}{int} k,\textcolor{keyword}{const} std::list<std::pair<std::string, std::string>>\& segmentsToDeactivate, \textcolor{keyword}{const} std::list<std::string>\& stationsToDeactivate);}
+\DoxyCodeLine{155     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_rail_manager_abdee8943a3093e3f084a95a7eb8a47fb}{segmentExists}}(\textcolor{keyword}{const} std::string\& origin, \textcolor{keyword}{const} std::string\& destination);}
+\DoxyCodeLine{161     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_rail_manager_a014a5561207823cf8056c0fe6da94432}{stationExists}}(\textcolor{keyword}{const} std::string\& station);}
+\DoxyCodeLine{165     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_manager_a7b6e456b0b4af147f1e44cebfd4e05da}{reactivateAllStations}}();}
+\DoxyCodeLine{169     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_manager_aa16c373c3aa8aad74185d9d194c01c17}{reactivateAllSegments}}();}
+\DoxyCodeLine{174     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_manager_a684f7a62a73229deff5fba87a79773ad}{deactivateStations}}(\textcolor{keyword}{const} std::list<std::string>\& stations);}
+\DoxyCodeLine{179     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_rail_manager_aadc781e20e55cbb6dace320ac3df5272}{deactivateSegments}}(\textcolor{keyword}{const} std::list<std::pair<std::string, std::string>>\& segments);}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181     \textcolor{keyword}{friend} \textcolor{keyword}{class }\mbox{\hyperlink{class_app}{App}};}
+\DoxyCodeLine{182 \};}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//RAILNETWORK\_RAILMANAGER\_H}}
+
+\end{DoxyCode}
