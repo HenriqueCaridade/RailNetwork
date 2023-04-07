@@ -12,19 +12,14 @@
 #include <unordered_set>
 #include "RailManager.h"
 
+
 /**
- * App represents the application (I/O).
+ * @class App
+ *
+ * @brief Represents the application (I/O).
  *
  * App takes care of the input and output of the program, it has functions to get multiple different ways to get input and has different ways of outputting information.
  */
-/**
-
-@class App
-
-@brief Represents the application (I/O).
-
-App takes care of the input and output of the program, it has functions to get multiple different ways to get input and has different ways of outputting information.
-*/
 class App {
     const static int titleSize = 65;
     const static int spaceBetween = 2;
@@ -36,42 +31,42 @@ class App {
     std::string datasetPath;
     RailManager railMan;
 
-/**
-@brief Gets a Floating Point input from the user.
-@param const std::string& question - The question to display to the user.
-@param const std::string& invalidMessage - The message to display if user inputs an invalid value.
-@param bool (*isValid)(double) - Pointer to a function that takes a double and returns a bool indicating if the input is valid.
-@return std::string - The user's input as a string.
-*/
+    /**
+     * @brief Gets a Floating Point input from the user.
+     * @param const std::string& question - The question to display to the user.
+     * @param const std::string& invalidMessage - The message to display if user inputs an invalid value.
+     * @param bool (*isValid)(double) - Pointer to a function that takes a double and returns a bool indicating if the input is valid.
+     * @return std::string - The user's input as a string.
+     */
     static std::string getDoubleString(const std::string& question, const std::string& invalidMessage, bool (*isValid)(double));
     /**
-  * @brief Gets a General input from the user.
-  * @tparam T - The type of input to get.
-  * @param const std::string& question - The question to display to the user.
-  * @param const std::string& invalidMessage - The message to display if user inputs an invalid value.
-  * @param const std::unordered_set<T>& validOptions - The set of valid options.
-  * @return T - The user's input.
-  */
+     * @brief Gets a General input from the user.
+     * @tparam T - The type of input to get.
+     * @param const std::string& question - The question to display to the user.
+     * @param const std::string& invalidMessage - The message to display if user inputs an invalid value.
+     * @param const std::unordered_set<T>& validOptions - The set of valid options.
+     * @return T - The user's input.
+     */
     template <class T> static T getInput(const std::string& question, const std::string& invalidMessage, const std::unordered_set<T>& validOptions);
     /**
-* @brief Gets a Multi Word input from the user.
-* @param const std::string& question - The question to display to the user.
-* @param const std::string& invalidMessage - The message to display if user inputs an invalid value.
-* @param const std::unordered_setstd::string& validOptions - The set of valid options.
-* @return std::string - The user's input as a string.
-*/
+     * @brief Gets a Multi Word input from the user.
+     * @param const std::string& question - The question to display to the user.
+     * @param const std::string& invalidMessage - The message to display if user inputs an invalid value.
+     * @param const std::unordered_setstd::string& validOptions - The set of valid options.
+     * @return std::string - The user's input as a string.
+     */
     static std::string getLine(const std::string& question, const std::string& invalidMessage, const std::unordered_set<std::string>& validOptions);
     /**
-* @brief Fills the line with the correct size.
-* @param const std::string& str - The string to be filled.
-* @return std::string - The filled string.
-*/
+     * @brief Fills the line with the correct size.
+     * @param const std::string& str - The string to be filled.
+     * @return std::string - The filled string.
+     */
     static std::string fillLine(const std::string& str);
     /**
- * @brief Pads string with the necessary characters to complete the menu line format.
- * @param const std::string& str - The string to be padded.
- * @return std::string - The padded string.
- */
+     * @brief Pads string with the necessary characters to complete the menu line format.
+     * @param const std::string& str - The string to be padded.
+     * @return std::string - The padded string.
+     */
     static std::string getMenuLine(const std::string& str);
     /**
      * Centers the string with the title line format.
