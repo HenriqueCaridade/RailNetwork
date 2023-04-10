@@ -73,6 +73,7 @@ void RailNetwork::clearVisits() {
 
 void RailNetwork::clearPrevs() {
     for(auto& p : nodes) {
+        p.second.prev = "";
         p.second.prevStandard = "";
         p.second.prevAlfa = "";
     }
@@ -99,10 +100,24 @@ unsigned RailNetwork::getCost(const string& node) {
 
 void RailNetwork::setPrev(const string &node, const string &prev, SegmentType type) {
     switch (type) {
+        case INVALID: getNode(node).prev = prev; break;
         case STANDARD: getNode(node).prevStandard = prev; break;
         case ALFA_PENDULAR: getNode(node).prevAlfa = prev; break;
     }
 }
+
+list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
+    return getNode(station).adj;
+}
+
+void RailNetwork::addEdge(const string &node, const Edge &edge) {
+    getNode(node).adj.push_back(edge);
+}
+
+// []===========================================[] //
+// ||                    BFSs                   || //
+// []===========================================[] //
+
 
 list<string> RailNetwork::BFSFlow(const string &src, const string &dest) {
     clearVisits();
@@ -132,12 +147,16 @@ list<string> RailNetwork::BFSFlow(const string &src, const string &dest) {
     if (getNode(dest).prevAlfa.empty()){ // Standard
         while (true) {
             if (res.front() == src) break;
-            res.push_front(getNode(res.front()).prevStandard);
+            Node& aux = getNode(res.front());
+            string prev = aux.prevStandard.empty() ? aux.prev : aux.prevStandard;
+            res.push_front(prev);
         }
     } else { // Alfa
         while (true) {
             if (res.front() == src) break;
-            res.push_front(getNode(res.front()).prevAlfa);
+            Node& aux = getNode(res.front());
+            string prev = aux.prevAlfa.empty() ? aux.prev : aux.prevAlfa;
+            res.push_front(prev);
         }
     }
     skip_found_destination:
@@ -215,12 +234,16 @@ list<string> RailNetwork::BFSActive(const string &src, const string &dest) {
     if (getNode(dest).prevAlfa.empty()){ // Standard
         while (true) {
             if (res.front() == src) break;
-            res.push_front(getNode(res.front()).prevStandard);
+            Node& aux = getNode(res.front());
+            string prev = aux.prevStandard.empty() ? aux.prev : aux.prevStandard;
+            res.push_front(prev);
         }
     } else { // Alfa
         while (true) {
             if (res.front() == src) break;
-            res.push_front(getNode(res.front()).prevAlfa);
+            Node& aux = getNode(res.front());
+            string prev = aux.prevAlfa.empty() ? aux.prev : aux.prevAlfa;
+            res.push_front(prev);
         }
     }
     skip_found_destination:
@@ -243,14 +266,6 @@ list<string> RailNetwork::distancedNodes(const string& src, unsigned distance) {
                 q.push({edge.dest, dist + 1});
     }
     return res;
-}
-
-list<RailNetwork::Edge> RailNetwork::getAdj(const string &station) {
-    return getNode(station).adj;
-}
-
-void RailNetwork::addEdge(const string &node, const Edge &edge) {
-    getNode(node).adj.push_back(edge);
 }
 
 // []===========================================[] //

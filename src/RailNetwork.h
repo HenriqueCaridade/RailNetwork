@@ -47,9 +47,10 @@ class RailNetwork { // Directed Graph
      */
     struct Node {
         std::string name;
+        std::list<Edge> adj;
+        std::string prev;
         std::string prevStandard;
         std::string prevAlfa;
-        std::list<Edge> adj;
         bool visited;
         bool visitedStandard;
         bool visitedAlfa;
@@ -63,6 +64,7 @@ class RailNetwork { // Directed Graph
         Node(std::string name, std::list<Edge> adj) :
             name(std::move(name)),
             adj(std::move(adj)),
+            prev(""),
             prevStandard(""),
             prevAlfa(""),
             visited(false),
