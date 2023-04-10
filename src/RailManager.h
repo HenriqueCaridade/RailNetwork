@@ -100,22 +100,22 @@ public:
      */
     unsigned maxFlow(const std::string& origin, const std::string& destination);
     /**
-     * @brief Gets a list of the most important stations in the network, in order of importance.
-     * @return A list of pairs of station names and their corresponding importance values.
+     * @brief Gets a list of the most important stations in the network and the maximum number of trains between them.
+     * @return A pair of the list of pairs of station names and their corresponding the maxFlow.
      */
-    std::list<std::pair<std::string, std::string>> importantStations();
+    std::pair<std::list<std::pair<std::string, std::string>>, unsigned> importantStations();
     /**
      * @brief Gets a list of the top k municipalities in the network, ranked by the number of stations they contain.
      * @param k The number of municipalities to include in the list.
      * @return A list of the names of the top k municipalities.
      */
-    std::list<std::string> topMunicipalities(int k);
+    std::list<std::pair<std::string, unsigned>> topMunicipalities(int k);
     /**
      * @brief Gets the top k districts with the most stations.
      * @param k The number of top districts to return.
      * @return A list of the names of the top k districts.
      */
-    std::list<std::string> topDistricts(int k);
+    std::list<std::pair<std::string, unsigned>> topDistricts(int k);
     /**
      * @brief Computes the maximum flow that can pass through a given station.
      * @param station The name of the station.

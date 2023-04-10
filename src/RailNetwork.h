@@ -12,7 +12,6 @@
 #include "Segment.h"
 #include "Station.h"
 /**
- *
  * RailNetwork class represents a directed graph that models a rail network system. It provides methods to calculate
  * maximum flow and other network analysis functions.
  */
@@ -48,9 +47,12 @@ class RailNetwork { // Directed Graph
      */
     struct Node {
         std::string name;
-        std::string prev;
+        std::string prevStandard;
+        std::string prevAlfa;
         std::list<Edge> adj;
         bool visited;
+        bool visitedStandard;
+        bool visitedAlfa;
         unsigned cost;
         bool active;
         /**
@@ -61,8 +63,11 @@ class RailNetwork { // Directed Graph
         Node(std::string name, std::list<Edge> adj) :
             name(std::move(name)),
             adj(std::move(adj)),
-            prev(""),
+            prevStandard(""),
+            prevAlfa(""),
             visited(false),
+            visitedStandard(false),
+            visitedAlfa(false),
             active(true),
             cost(UINT_MAX){}
     };
@@ -84,12 +89,24 @@ class RailNetwork { // Directed Graph
     /**
      * @brief Marks the node with the given name as visited.
      * @param station The name of the node to mark as visited.
+     * @param type The type of train.
      */
-    void visit(const std::string& station);
+    void visit(const std::string& station, SegmentType type = INVALID);
+    /**
+     * @brief Returns if given node is visited.
+     * @param station The name of the node to mark as visited.
+     * @param type The type of train.
+     * @return is Node visited?
+     */
+    bool isVisited(const std::string &station, SegmentType type = INVALID);
     /**
      * @brief Marks all nodes as not visited.
      */
     void clearVisits();
+    /**
+     * @brief Clears prev variables.
+     */
+    void clearPrevs();
     /**
      * @brief Clears the flow of all edges in the graph.
      */
@@ -109,7 +126,7 @@ class RailNetwork { // Directed Graph
      * @param node The name of the node to set the previous node for.
      * @param prev The name of the previous node.
      */
-    void setPrev(const std::string& node, const std::string& prev);
+    void setPrev(const std::string& node, const std::string& prev, SegmentType type);
     /**
      * @brief Returns the cost of the node with the given name.
      * @param node The name of the node to return the cost for.
@@ -172,23 +189,23 @@ public:
     unsigned maxFlow(const std::string& origin, const std::string& destination);
     /**
      * Returns a list of all important stations in the rail network. Importance is based on the number of paths that pass through the station.
-     * @return A list of all important stations in the rail network.
+     * @return A pair of the list of all important stations in the rail network and the maxFlow between them.
      */
-    std::list<std::pair<std::string, std::string>> importantStations();
+    std::pair<std::list<std::pair<std::string, std::string>>, unsigned> importantStations();
     /**
      * Returns a list of the top k municipalities in the rail network based on the number of stations within their borders.
      * @param k The number of top municipalities to return.
      * @param stations An unordered map of station names to station objects.
      * @return A list of the top k municipalities in the rail network.
      */
-    std::list<std::string> topMunicipalities(int k, const std::unordered_map<std::string, Station>& stations);
+    std::list<std::pair<std::string, unsigned>> topMunicipalities(int k, const std::unordered_map<std::string, Station>& stations);
     /**
      * Returns a list of the top k districts in the rail network based on the number of stations within their borders.
      * @param k The number of top districts to return.
      * @param stations An unordered map of station names to station objects.
      * @return A list of the top k districts in the rail network.
      */
-    std::list<std::string> topDistricts(int k, const std::unordered_map<std::string, Station>& stations);
+    std::list<std::pair<std::string, unsigned>> topDistricts(int k, const std::unordered_map<std::string, Station>& stations);
     /**
      * Calculates and returns the maximum flow that passes through a specific station in the rail network.
      * @param station The name of the station.

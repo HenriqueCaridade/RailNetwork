@@ -14,7 +14,7 @@ using namespace std;
 
 static void clear_screen() {
 #ifdef _WIN32
-    // std::system("cls");
+    std::system("cls");
 #else
     std::system("clear");
 #endif
@@ -121,7 +121,18 @@ void App::runMenu(const string &title, const vector<pair<char, string>> &options
 
 void App::start(){
     dataSelectionMenu();
-    mainMenu();
+    /*
+    // Santar├®m
+    const string st1 = "Lisboa Oriente";
+    const string st2 = "Aveiro - Vouga";
+    unsigned maxF1, maxF2;
+    maxF1 = railMan.maxFlow(st1, st2);
+    maxF2 = railMan.maxFlow(st2, st1);
+    cout << maxF1 << ' ' << maxF2 << endl;
+
+    system("PAUSE");
+    */
+     mainMenu();
 }
 
 void App::mainMenu() {
@@ -185,7 +196,9 @@ void App::maxFlowOption() {
 
 void App::importantStationsOption() {
     cout << " - Important Stations Pairs -" << endl;
-    for (const auto& [stationA, stationB] : railMan.importantStations())
+    auto [stations, maxFlow] = railMan.importantStations();
+    cout << "Max Flow: " << maxFlow << '\n';
+    for (const auto& [stationA, stationB] : stations)
         cout << stationA << " - " << stationB << '\n';
     cout << flush;
 }
@@ -198,11 +211,11 @@ void App::largerBudgetPlacesOption() {
     if (input == "x") return;
     int disK = ceil(stod(input));
     cout << " - Top " << munK << " Municipalities -" << endl;
-    for (const auto& municipality : railMan.topMunicipalities(munK))
-        cout << municipality << '\n';
+    for (const auto& [municipality, maxF] : railMan.topMunicipalities(munK))
+        cout << municipality << " - " << maxF << '\n';
     cout << "\n - Top " << disK << " Districts -" << endl;
-    for (const auto& district : railMan.topDistricts(munK))
-        cout << district << '\n';
+    for (const auto& [district, maxF] : railMan.topDistricts(disK))
+        cout << district << " - " << maxF << '\n';
     cout << flush;
 }
 
@@ -213,7 +226,7 @@ void App::maxFlowStationOption() {
         stationNames.insert(name);
     stationNames.insert("x"); // Cancel Option
     cin.ignore(); // Ignore \n char from previous choice.
-    station = getLine("Origin Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
+    station = getLine("Station (x to Cancel):", "Invalid Station Name. Try Again.", stationNames);
     if (station == "x") return;
     cout << " - Max Flow of " << station << " -" << endl;
     cout << "Max Flow: " << railMan.maxFlowStation(station) << endl;

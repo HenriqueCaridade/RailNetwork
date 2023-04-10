@@ -141,15 +141,15 @@ unsigned RailManager::maxFlow(const string &origin, const string &destination) {
     return railNet.maxFlow(origin, destination);
 }
 
-list<pair<string, string>> RailManager::importantStations() {
+pair<list<pair<string, string>>, unsigned> RailManager::importantStations() {
     return railNet.importantStations();
 }
 
-list<string> RailManager::topMunicipalities(int k) {
+list<pair<string, unsigned>> RailManager::topMunicipalities(int k) {
     return railNet.topMunicipalities(k, stations);
 }
 
-list<string> RailManager::topDistricts(int k) {
+list<pair<string, unsigned>> RailManager::topDistricts(int k) {
     return railNet.topDistricts(k, stations);
 }
 
