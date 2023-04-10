@@ -306,9 +306,9 @@ void App::mostSensitiveStationsOption() {
     string input = getDoubleString("Top k (> 0) (x to Cancel):", "Invalid Number. Try Again.", [](double x) -> bool { return x > 0; });
     if (input == "x") return;
     int k = ceil(stod(input));
-    cout << " - Top " << k << " Most Sensitive Stations -" << endl;
-    for (const auto& station : railMan.topAffectedStations(k,segmentsToDeactivate,stationsToDeactivate))
-        cout << station << '\n';
+    cout << " - Top " << k << " Most Sensitive Stations (Biggest difference in flow) -" << endl;
+    for (const auto& [station, maxDiff] : railMan.topAffectedStations(k,segmentsToDeactivate,stationsToDeactivate))
+        cout << station << " - " << maxDiff << '\n';
     cout << flush;
 }
 

@@ -192,9 +192,10 @@ list<list<string>> RailNetwork::BFSCost(const string &src, const string &dest) {
             continue;
         }
         list<Edge> edges = getAdj(curr.back());
-        unsigned newCost = cost + getCostByType(type);
+        unsigned newCost;
         for (const Edge& edge : edges) {
-            if (!type && (type != edge.type)) continue; // Different Train
+            if (type != INVALID && (type != edge.type)) continue; // Different Train
+            newCost = cost + getCostByType(edge.type);
             if (newCost <= getCost(edge.dest)) { // Better Path
                 setCost(edge.dest, newCost);
                 curr.push_back(edge.dest);
@@ -208,6 +209,7 @@ list<list<string>> RailNetwork::BFSCost(const string &src, const string &dest) {
 
 list<string> RailNetwork::BFSActive(const string &src, const string &dest) {
     clearVisits();
+    clearPrevs();
     queue<pair<string, SegmentType>> q;
     q.push({src, INVALID});
     list<string> res;
@@ -216,15 +218,15 @@ list<string> RailNetwork::BFSActive(const string &src, const string &dest) {
         visit(curr, type);
         list<Edge> edges = getAdj(curr);
         q.pop();
-        for(const Edge& edge : edges) {
-            if (!type && (type != edge.type)) continue; // Different Train
+        for (const Edge& edge : edges) {
+            if (type != INVALID && (type != edge.type)) continue; // Different Train
             if (!edge.active) continue; // if edge is deactivated
             if (!getNode(edge.dest).active) continue; // if destination station is deactivated
             if (edge.flow == edge.capacity) continue; // if segment flow is full dont add node to queue
             if (isVisited(edge.dest)) continue;
             if (isVisited(edge.dest, edge.type)) continue;
             setPrev(edge.dest, curr, edge.type);
-            q.push({edge.dest, type});
+            q.push({edge.dest, edge.type});
             if (edge.dest == dest) goto found_destination;
         }
     }
@@ -437,19 +439,14 @@ unsigned RailNetwork::maxFlowMinCost(const string &origin, const string &destina
         string prev;
         for (const string& node : path) {
             if (!prev.empty()) {
-                try {
-                    subGraph.getEdge(prev, node);
-                } catch (std::out_of_range& e) {
-                    // If Edge not in subGraph add it.
-                    subGraph.addEdge(prev, getEdge(prev, node));
-                }
+                for (auto e : subGraph.getNode(prev).adj)
+                    if (e.dest == node)
+                        goto dont_add_edge;
+                subGraph.addEdge(prev, getEdge(prev, node));
             }
-            try {
-                subGraph.getNode(node);
-            } catch (std::exception& e) {
-                // If Node not in subGraph add it.
+            dont_add_edge:
+            if (subGraph.nodes.find(node) == subGraph.nodes.end())
                 subGraph.addNode(node, {});
-            }
             prev = node;
         }
     }
@@ -462,27 +459,23 @@ unsigned RailNetwork::maxFlowReduced(const string &origin, const string &destina
     unsigned maxFlow = 0;
     while(true){
         list<string> res = BFSActive(origin,destination);
-        if(res.empty()) break;
+        if (res.empty()) break;
         unsigned bottleneck = UINT_MAX;
         auto it = res.begin();
         auto itNext = res.begin();
         itNext++;
-        while(itNext != res.end()){ // find bottleneck in the shortest path
-            Node vert = nodes.at(*it);
-            string next = *itNext;
-            Edge edge = getEdge(*it,next);
+        while (itNext != res.end()) { // find bottleneck in the shortest path
+            const Edge& edge = getEdge(*it, *itNext);
             unsigned remaining = edge.capacity - edge.flow;
-            if(remaining < bottleneck) bottleneck = remaining;
+            if (remaining < bottleneck) bottleneck = remaining;
             it++; itNext++;
         }
         it = res.begin();
         itNext = res.begin();
         itNext++;
         maxFlow += bottleneck;
-        while(it != res.end()){ // find bottleneck in the shortest path
-            Node vert = nodes.at(*it);
-            string next = *itNext;
-            Edge edge = getEdge(*it,next);
+        while (itNext != res.end()) { // find bottleneck in the shortest path
+            Edge& edge = getEdge(*it, *itNext);
             edge.flow += bottleneck;
             it++; itNext++;
         }
@@ -490,10 +483,10 @@ unsigned RailNetwork::maxFlowReduced(const string &origin, const string &destina
     return maxFlow;
 }
 
-list<string> RailNetwork::topAffectedStations(int k, const unordered_map<string,Station>& stations) {
+list<pair<string, unsigned>> RailNetwork::topAffectedStations(int k, const unordered_map<string,Station>& stations) {
     priority_queue<pair<string, unsigned>, vector<pair<string, unsigned>>, LessCompare<string>> flowVariance;
-    for(auto [name,station]:stations){
-        list<string> nodesAtDistanceTwo = distancedNodes(name,2);
+    for(auto [name, station] : stations){
+        list<string> nodesAtDistanceTwo = distancedNodes(name, 2);
         if (nodesAtDistanceTwo.empty()) {
             unsigned sum = 0;
             for (const Edge& edge : getAdj(name))
@@ -506,13 +499,13 @@ list<string> RailNetwork::topAffectedStations(int k, const unordered_map<string,
         }
         unsigned normalFlow = maxFlow(sourceNodeName, name);
         unsigned reducedFlow = maxFlowReduced(sourceNodeName, name);
-        flowVariance.emplace(name,normalFlow-reducedFlow);
+        flowVariance.emplace(name, normalFlow - reducedFlow);
         nodes.erase(sourceNodeName);
     }
-    list<string> res;
+    list<pair<string, unsigned>> res;
     for (int i = 0; i < k; i++) {
         if (flowVariance.empty()) break;
-        res.push_back(flowVariance.top().first);
+        res.push_back(flowVariance.top());
         flowVariance.pop();
     }
     return res;

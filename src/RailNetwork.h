@@ -235,7 +235,7 @@ public:
      * @param stations The map of stations.
      * @return A list of the names of the top k affected stations.
      */
-    std::list<std::string> topAffectedStations(int k,  const std::unordered_map<std::string, Station>& stations );
+    std::list<std::pair<std::string, unsigned>> topAffectedStations(int k,  const std::unordered_map<std::string, Station>& stations );
 
     friend class RailManager;
     friend class App;

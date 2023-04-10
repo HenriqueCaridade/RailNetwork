@@ -145,7 +145,7 @@ public:
      * @param stationsToDeactivate A list of names of stations to deactivate.
      * @return A list of the names of the top k stations that are most affected by the given segments and/or stations being deactivated.
      */
-    std::list<std::string> topAffectedStations(int k,const std::list<std::pair<std::string, std::string>>& segmentsToDeactivate, const std::list<std::string>& stationsToDeactivate);
+    std::list<std::pair<std::string, unsigned>> topAffectedStations(int k,const std::list<std::pair<std::string, std::string>>& segmentsToDeactivate, const std::list<std::string>& stationsToDeactivate);
     /**
      * @brief Checks if a segment exists between two stations.
      * @param origin The name of the origin station.
